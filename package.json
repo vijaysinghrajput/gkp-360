@@ -27,9 +27,7 @@
     "react-admin": "^5.4.3",
     "react-bootstrap": "^2.10.7",
     "react-dom": "^19.0.0",
-    "react-responsive-carousel": "^3.2.23",
-    "semantic-ui-css": "^2.5.0",
-    "semantic-ui-react": "^2.1.5"
+    "react-responsive-carousel": "^3.2.23"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
