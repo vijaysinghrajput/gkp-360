@@ -25,6 +25,7 @@ export const setupRecaptcha = () => {
   if (typeof window !== "undefined") {
     if (!window.recaptchaVerifier) {
       window.recaptchaVerifier = new RecaptchaVerifier(
+        auth,
         "recaptcha-container", // Match your container ID
         {
           size: "invisible",
