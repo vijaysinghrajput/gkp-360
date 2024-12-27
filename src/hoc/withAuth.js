@@ -11,7 +11,7 @@ export default function withAuth(Component) {
       if (!loading && !user) {
         router.push("/login");
       }
-    }, [loading, user]);
+    }, [loading, user]); //nvnETE
 
     if (loading || !user) {
       return <p>Loading...</p>;
