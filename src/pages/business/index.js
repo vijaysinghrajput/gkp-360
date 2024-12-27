@@ -1,6 +1,7 @@
 import Link from "next/link";
 import HeadSeo from "../../components/seo/HeadSeo";
 import Banner from "../../components/ui/Banner";
+import BusinessCategory from "./comonent/BusinessCategory";
 
 export default function Home() {
   const categories = [
@@ -38,54 +39,7 @@ export default function Home() {
         <Banner />
 
         {/* Category Section */}
-        <div style={{ marginTop: "30px", textAlign: "center" }}>
-          <h2>Explore Categories</h2>
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              justifyContent: "center",
-              gap: "20px",
-              marginTop: "20px",
-            }}
-          >
-            {categories.map((category, index) => (
-              <Link href={category.link} key={index} passHref>
-                <div
-                  style={{
-                    width: "120px",
-                    textAlign: "center",
-                    cursor: "pointer",
-                    padding: "10px",
-                    border: "1px solid #ccc",
-                    borderRadius: "10px",
-                    boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-                    transition: "transform 0.2s ease-in-out",
-                  }}
-                  onMouseOver={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseOut={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
-                >
-                  <img
-                    src={category.icon}
-                    alt={category.title}
-                    style={{
-                      width: "48px",
-                      height: "48px",
-                      marginBottom: "10px",
-                    }}
-                  />
-                  <p style={{ fontSize: "16px", fontWeight: "bold" }}>
-                    {category.title}
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
+        <BusinessCategory />
 
         {/* App Download Section */}
         <div style={{ marginTop: "30px", textAlign: "center" }}>
