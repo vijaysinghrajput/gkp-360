@@ -9,15 +9,37 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@blueprintjs/core": "^5.16.2",
+    "@chakra-ui/icons": "^2.2.4",
+    "@chakra-ui/react": "^3.2.3",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^6.3.0",
+    "@mui/material": "^6.3.0",
+    "antd": "^5.22.6",
+    "bcrypt": "^5.1.1",
+    "bootstrap": "^5.3.3",
+    "firebase": "^11.1.0",
+    "framer-motion": "^11.15.0",
+    "grommet": "^2.43.0",
+    "next": "15.1.2",
+    "next-auth": "^4.24.11",
+    "next-sitemap": "^4.2.3",
     "react": "^19.0.0",
+    "react-admin": "^5.4.3",
+    "react-bootstrap": "^2.10.7",
     "react-dom": "^19.0.0",
-    "next": "15.1.2"
+    "react-responsive-carousel": "^3.2.23",
+    "semantic-ui-css": "^2.5.0",
+    "semantic-ui-react": "^2.1.5"
   },
   "devDependencies": {
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1",
+    "@eslint/eslintrc": "^3",
+    "autoprefixer": "^10.4.20",
     "eslint": "^9",
     "eslint-config-next": "15.1.2",
-    "@eslint/eslintrc": "^3"
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "webpack-bundle-analyzer": "^4.10.2"
   }
 }

@@ -1,0 +1,40 @@
+/* Desktop Menu Styling */
+.desktopMenu {
+    display: flex !important;
+    gap: 1rem;
+}
+
+.desktopMenu .item {
+    color: white !important;
+    font-size: 1rem;
+}
+
+.desktopMenu .item:hover {
+    color: #ffc107 !important;
+}
+
+/* Login Button Styling */
+.loginButton {
+    margin-left: 1rem;
+}
+
+/* Drawer Menu Styling */
+.drawerMenu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.drawerMenu li {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.drawerMenu li a {
+    text-decoration: none;
+    color: #333;
+}
+
+.drawerMenu li a:hover {
+    color: #4caf50;
+}
