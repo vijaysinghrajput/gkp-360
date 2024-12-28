@@ -1,32 +1,36 @@
 import NextAuth from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
-import FacebookProvider from "next-auth/providers/facebook";
 
 export default NextAuth({
-  providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    }),
-    FacebookProvider({
-      clientId: process.env.FACEBOOK_CLIENT_ID,
-      clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-    }),
-  ],
+  // Custom pages for sign-in, sign-out, and errors
   pages: {
-    signIn: "/login", // Custom sign-in page
+    signIn: "/login", // Custom login page
+    error: "/auth/error", // Error page
+    signOut: "/auth/signout", // Sign-out page
   },
+
+  // Callbacks for session and JWT customization
   callbacks: {
-    async session({ session, token, user }) {
-      session.user.id = token.sub; // Append the user ID to the session
+    async session({ session, token }) {
+      // Customize session object
+      session.user.id = token.sub; // Include user ID
       return session;
     },
-    async jwt({ token, user, account, profile, isNewUser }) {
-      if (account) {
-        token.accessToken = account.access_token;
-      }
+    async jwt({ token }) {
+      // Customize JWT object
       return token;
     },
   },
+
+  // Secret for securing JWT tokens
   secret: process.env.NEXTAUTH_SECRET,
+
+  // Use JSON Web Token (JWT) strategy for sessions
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+    updateAge: 24 * 60 * 60, // Update JWT every 24 hours
+  },
+
+  // Debug mode for development
+  debug: process.env.NODE_ENV === "development",
 });
