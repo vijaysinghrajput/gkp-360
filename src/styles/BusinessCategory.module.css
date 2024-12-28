@@ -1,0 +1,140 @@
+/* General Styles */
+.container {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* Search Section */
+.searchContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 15px 20px;
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.searchInput {
+  padding: 12px 16px;
+  font-size: 16px;
+  border: 2px solid #ff5722;
+  border-radius: 50px;
+  outline: none;
+  flex: 1 0 auto;
+  max-width: 400px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.searchInput:focus {
+  border-color: #e64a19;
+  box-shadow: 0 0 10px rgba(255, 87, 34, 0.4);
+}
+
+.searchButton {
+  background-color: #ff5722;
+  color: #fff;
+  border: none;
+  padding: 12px 16px;
+  border-radius: 50px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.searchButton:hover {
+  background-color: #e64a19;
+}
+
+/* Header Section */
+.header {
+  text-align: center;
+  color: #ff5722;
+  margin: 20px 0;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+/* Categories Grid */
+.categoriesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+/* Category Card */
+.categoryCard {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  text-align: center;
+  padding: 20px;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.categoryCard:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
+}
+
+/* Category Icon */
+.categoryIcon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 10px;
+}
+
+/* Category Name */
+.categoryName {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8px;
+  text-align: center;
+  word-wrap: break-word;
+}
+
+/* Hindi Name */
+.hindiName {
+  font-size: 14px;
+  color: #777;
+  text-align: center;
+  word-wrap: break-word;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .searchContainer {
+    padding: 10px 15px;
+  }
+
+  .searchInput {
+    max-width: 300px;
+  }
+
+  .categoriesGrid {
+    gap: 10px;
+  }
+
+  .categoryCard {
+    padding: 15px;
+  }
+
+  .categoryName {
+    font-size: 14px;
+  }
+
+  .hindiName {
+    font-size: 12px;
+  }
+}

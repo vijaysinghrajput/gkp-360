@@ -1,180 +1,184 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import {
+  Box,
+  Typography,
+  Grid,
+  CircularProgress,
+  Snackbar,
+  Alert,
+} from "@mui/material";
+import BusinessSearchBox from "../../../components/ui/BusinessSearchBox";
 
-export default function BusinessCategory() {
-  const [categories, setCategories] = useState([]);
-  const [filteredCategories, setFilteredCategories] = useState([]);
+export default function BusinessList() {
+  const [businesses, setBusinesses] = useState([]);
+  const [filteredBusinesses, setFilteredBusinesses] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [location, setLocation] = useState({ city: "", state: "" });
+  const [selectedCategory, setSelectedCatgeory] = useState({
+    id: null,
+    category_name_slug: "",
+  });
+  const [searchTerm, setSearchTerm] = useState("");
+  const [error, setError] = useState("");
+
+  const fetchBusinesses = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/Website/getAllBusinessList`
+      );
+      const data = await response.json();
+      if (data.status === "success") {
+        setBusinesses(data.data);
+        setFilteredBusinesses(data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching businesses:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/Website/getBusinessCategory`
-        );
-        const data = await response.json();
-        if (data.status === "success") {
-          setCategories(data.data);
-          setFilteredCategories(data.data);
-        }
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCategories();
+    fetchBusinesses();
   }, []);
 
-  const handleSearch = (e) => {
-    const query = e.target.value.toLowerCase();
-    setSearchQuery(query);
-    const filtered = categories.filter((category) =>
-      category.category_name.toLowerCase().includes(query)
+  const handleSearch = () => {
+    const query = searchTerm.toLowerCase();
+    const filtered = businesses.filter((business) =>
+      business.title.toLowerCase().includes(query)
     );
-    setFilteredCategories(filtered);
+    setFilteredBusinesses(filtered);
   };
 
   if (loading) {
     return (
-      <div style={{ textAlign: "center", marginTop: "50px" }}>Loading...</div>
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <CircularProgress />
+      </Box>
     );
   }
 
   return (
-    <div
-      style={{
-        width: "100vw",
-        height: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        backgroundColor: "#f4f7fc",
-        fontFamily: "'Poppins', sans-serif",
-        padding: "20px",
-        boxSizing: "border-box",
+    <Box
+      sx={{
+        backgroundColor: "background.default",
+        minHeight: "100vh",
       }}
     >
-      {/* Search Bar */}
-      <div
-        style={{
-          marginBottom: "20px",
-          width: "100%",
-          maxWidth: "600px",
+      <Box
+        sx={{
+          position: "sticky",
+          top: "64px",
+          zIndex: 10,
+          backgroundColor: "#fff",
+          padding: "10px 20px",
+          borderBottom: "1px solid #ddd",
+          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
         }}
       >
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={handleSearch}
-          placeholder="Search categories..."
-          style={{
-            width: "100%",
-            padding: "15px",
-            fontSize: "18px",
-            borderRadius: "30px",
-            border: "1px solid #ccc",
-            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-            outline: "none",
-            transition: "box-shadow 0.3s ease",
-          }}
-          onFocus={(e) => (e.target.style.boxShadow = "0 0 10px #4CAF50")}
-          onBlur={(e) =>
-            (e.target.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)")
-          }
-        />
-      </div>
+        <BusinessSearchBox />
+      </Box>
 
-      {/* Categories Grid */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))",
-          gap: "20px",
-          width: "100%",
-          maxWidth: "1200px",
-          overflow: "auto",
-          flex: 1, // Allows the grid to stretch and take up the remaining space
-          padding: "10px",
-        }}
+      <Typography
+        variant="h6"
+        align="center"
+        color="primary.main"
+        sx={{ marginY: 3 }}
       >
-        {filteredCategories.map((category, index) => (
-          <Link
-            href={`/categories/${category.category_name_slug}`}
-            key={index}
-            passHref
-          >
-            <div
-              style={{
-                width: "100%",
-                height: "150px",
-                maxWidth: "150px",
-                backgroundColor: "#fff",
-                padding: "20px",
-                borderRadius: "15px",
-                boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-                textAlign: "center",
-                cursor: "pointer",
-                transition: "transform 0.3s ease, background-color 0.3s ease",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                overflow: "hidden",
-              }}
-              onMouseOver={(e) => {
-                e.currentTarget.style.transform = "scale(1.1)";
-                e.currentTarget.style.backgroundColor = "#4CAF50";
-                e.currentTarget.style.color = "#fff";
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.transform = "scale(1)";
-                e.currentTarget.style.backgroundColor = "#fff";
-                e.currentTarget.style.color = "#000";
-              }}
+        {location.city && location.state
+          ? `Showing results for ${location.city.replace(
+              /-/g,
+              " "
+            )}, ${location.state.replace(/-/g, " ")}`
+          : "Set your location to see results"}
+      </Typography>
+
+      <Typography
+        variant="h6"
+        align="center"
+        color="primary.main"
+        sx={{ marginY: 3 }}
+      >
+        {selectedCategory?.category_name_slug}
+      </Typography>
+
+      <Grid container spacing={3} sx={{ padding: "20px" }}>
+        {filteredBusinesses.map((business, index) => (
+          <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+            <Link
+              href={`/business/${location.city}/${location.state}/${business.listing_id}`}
+              passHref
             >
-              <div
-                style={{
-                  fontSize: "16px",
-                  fontWeight: "bold",
-                  marginBottom: "10px",
-                  wordBreak: "break-word",
+              <Box
+                sx={{
+                  padding: 2,
+                  border: "1px solid",
+                  borderColor: "primary.main",
+                  borderRadius: 2,
                   textAlign: "center",
-                  maxWidth: "100%",
+                  backgroundColor: "#fff",
+                  transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                  cursor: "pointer",
+                  "&:hover": {
+                    transform: "scale(1.05)",
+                    boxShadow: 3,
+                  },
                 }}
               >
-                {category.category_name}
-              </div>
-              <div
-                style={{
-                  fontSize: "14px",
-                  color: "#555",
-                  wordBreak: "break-word",
-                  textAlign: "center",
-                }}
-              >
-                {category.hindi_name}
-              </div>
-            </div>
-          </Link>
+                <Typography
+                  variant="subtitle1"
+                  fontWeight="bold"
+                  color="text.primary"
+                >
+                  {business.title}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mt: 1 }}
+                >
+                  {business.full_address}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mt: 1 }}
+                >
+                  Phone: {business.primary_number}
+                </Typography>
+              </Box>
+            </Link>
+          </Grid>
         ))}
-      </div>
+        {filteredBusinesses.length === 0 && (
+          <Typography
+            variant="body1"
+            align="center"
+            color="text.secondary"
+            sx={{ width: "100%", marginTop: 3 }}
+          >
+            No businesses found.
+          </Typography>
+        )}
+      </Grid>
 
-      {/* No Results Found */}
-      {filteredCategories.length === 0 && (
-        <div
-          style={{
-            textAlign: "center",
-            marginTop: "30px",
-            color: "#999",
-            fontSize: "18px",
-          }}
+      {error && (
+        <Snackbar
+          open={true}
+          autoHideDuration={6000}
+          onClose={() => setError("")}
         >
-          No categories found.
-        </div>
+          <Alert onClose={() => setError("")} severity="error">
+            {error}
+          </Alert>
+        </Snackbar>
       )}
-    </div>
+    </Box>
   );
 }
