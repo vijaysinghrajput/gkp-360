@@ -4,6 +4,7 @@ import Typography from "@mui/material/Typography";
 import Link from "next/link";
 import Head from "next/head";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
+import { ProjectSetting } from "../../../config/ProjectSetting";
 
 const BusinessBreadcrumbList = ({ currentCategory, city, state }) => {
   const toTitleCase = (str) =>
@@ -12,7 +13,7 @@ const BusinessBreadcrumbList = ({ currentCategory, city, state }) => {
       .toLowerCase() // Convert the entire string to lowercase
       .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize the first letter of each word
 
-  const domain = process.env.NEXT_PUBLIC_NEXTAUTH_URL;
+  const domain = ProjectSetting.COMPANY_WEBSITE;
 
   const CategorySchema = {
     "@context": "https://schema.org",

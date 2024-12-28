@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { TextField, CircularProgress, Autocomplete } from "@mui/material";
 import { debounce } from "lodash";
+import { ProjectSetting } from "../../config/ProjectSetting";
 
 export default function SearchCity({ onCitySelect }) {
   const [cities, setCities] = useState([]);
@@ -64,7 +65,7 @@ export default function SearchCity({ onCitySelect }) {
   const fetchCitySuggestions = async (input) => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/Website/searchCities?query=${input}`
+        `${ProjectSetting.API_URL}/Website/searchCities?query=${input}`
       );
       const data = await response.json();
       if (data.status === "success") {

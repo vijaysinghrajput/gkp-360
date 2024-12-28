@@ -17,6 +17,7 @@ import { useRouter } from "next/router";
 import BusinessSubacategoryLists from "../../pages/business/comonent/BusinessSubacategoryLists";
 import BusinessListCardRactangular from "../../pages/business/comonent/BusinessListCardRactangular";
 import BusinessBreadcrumbList from "../../pages/business/comonent/BusinessBreadcrumbList";
+import { ProjectSetting } from "../../config/ProjectSetting";
 
 export default function BusinessByCategory({
   categoryslug,
@@ -50,7 +51,7 @@ export default function BusinessByCategory({
   const fetchBusinesses = async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/Website/getBusinesses?categoryid=${categoryid}&city=${city}&state=${state}`
+        `${ProjectSetting.API_URL}/Website/getBusinesses?categoryid=${categoryid}&city=${city}&state=${state}`
       );
 
       const data = await response.json();

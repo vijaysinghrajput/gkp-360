@@ -10,6 +10,7 @@ import {
   Stack,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { ProjectSetting } from "../../../config/ProjectSetting";
 
 export default function BusinessStateCityList() {
   const [stateCityData, setStateCityData] = useState([]);
@@ -19,7 +20,7 @@ export default function BusinessStateCityList() {
     const fetchStateCityData = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/Website/getStateCityList`
+          `${ProjectSetting}/Website/getStateCityList`
         );
         const data = await response.json();
         if (data.status === "success") {

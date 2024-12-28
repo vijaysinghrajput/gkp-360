@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import Head from "next/head";
+import { ProjectSetting } from "../../../config/ProjectSetting";
 
 const BusinessSubcategoryLists = ({
   mainCategoryName,
@@ -16,7 +17,7 @@ const BusinessSubcategoryLists = ({
   city,
   state,
 }) => {
-  const domain = process.env.NEXT_PUBLIC_NEXTAUTH_URL;
+  const domain = ProjectSetting.COMPANY_WEBSITE;
 
   const toTitleCase = (str) =>
     str

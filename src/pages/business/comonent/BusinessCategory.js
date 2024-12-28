@@ -10,6 +10,8 @@ import {
 } from "@mui/material";
 import BusinessSearchBox from "../../../components/ui/BusinessSearchBox";
 
+import { ProjectSetting } from "../../../config/ProjectSetting";
+
 export default function BusinessList() {
   const [businesses, setBusinesses] = useState([]);
   const [filteredBusinesses, setFilteredBusinesses] = useState([]);
@@ -25,7 +27,7 @@ export default function BusinessList() {
   const fetchBusinesses = async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/Website/getAllBusinessList`
+        `${ProjectSetting.API_URL}/Website/getAllBusinessList`
       );
       const data = await response.json();
       if (data.status === "success") {

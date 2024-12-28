@@ -11,6 +11,8 @@ import {
 } from "@mui/material";
 import { debounce } from "lodash";
 
+import { ProjectSetting } from "../../config/ProjectSetting";
+
 export default function SearchBusinessCategory({ onCategorySelect }) {
   const [categories, setCategories] = useState([]);
   const [defaultCategories, setDefaultCategories] = useState([]);
@@ -23,7 +25,7 @@ export default function SearchBusinessCategory({ onCategorySelect }) {
     const fetchDefaultCategories = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/Website/getDefaultCategories`
+          `${ProjectSetting.API_URL}/Website/getDefaultCategories`
         );
         const data = await response.json();
         if (data.status === "success") {
@@ -40,7 +42,7 @@ export default function SearchBusinessCategory({ onCategorySelect }) {
   const fetchCategorySuggestions = async (input) => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/Website/searchCategories?query=${input}`
+        `${ProjectSetting.API_URL}/Website/searchCategories?query=${input}`
       );
       const data = await response.json();
       if (data.status === "success") {

@@ -3,6 +3,7 @@ import { Box, TextField, Button, Typography, Alert, Grid } from "@mui/material";
 import { useRouter } from "next/router";
 import { auth, setupRecaptcha } from "../firebase"; // Firebase configuration
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import { ProjectSetting } from "../config/ProjectSetting";
 
 export default function SignupPage() {
   const [name, setName] = useState("");
@@ -97,18 +98,15 @@ export default function SignupPage() {
     }
 
     try {
-      const response = await fetch(
-        process.env.NEXT_PUBLIC_API_URL + "/Website/signup",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: trimmedName,
-            mobile: trimmedMobile,
-            password: trimmedPassword,
-          }),
-        }
-      );
+      const response = await fetch(ProjectSetting.API_URL + "/Website/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: trimmedName,
+          mobile: trimmedMobile,
+          password: trimmedPassword,
+        }),
+      });
 
       const data = await response.json();
 

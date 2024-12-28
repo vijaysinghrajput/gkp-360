@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
 import FacebookIcon from "@mui/icons-material/Facebook";
+import { ProjectSetting } from "../config/ProjectSetting";
 
 export default function LoginPage() {
   const [identifier, setIdentifier] = useState(""); // Email or mobile
@@ -35,17 +36,14 @@ export default function LoginPage() {
     }
 
     try {
-      const response = await fetch(
-        process.env.NEXT_PUBLIC_API_URL + "/Website/login",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            identifier: trimmedIdentifier,
-            password: trimmedPassword,
-          }),
-        }
-      );
+      const response = await fetch(ProjectSetting.API_URL + "/Website/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          identifier: trimmedIdentifier,
+          password: trimmedPassword,
+        }),
+      });
 
       const data = await response.json();
 
