@@ -88,7 +88,7 @@ const BusinessSubcategoryLists = ({
 
       {/* List of Subcategories */}
       <List sx={{ padding: 0 }}>
-        {displayedSubcategories.map((subcategory, index) => (
+        {displayedSubcategories?.map((subcategory, index) => (
           <React.Fragment key={subcategory.id}>
             <Link
               href={`/${subcategory?.category_name_slug}/${city}/${state}/${subcategory?.id}/business`}
@@ -122,7 +122,7 @@ const BusinessSubcategoryLists = ({
                 </Typography>
               </ListItem>
             </Link>
-            {index !== displayedSubcategories.length - 1 && (
+            {index !== displayedSubcategories?.length - 1 && (
               <Divider sx={{ borderColor: "#e0e0e0" }} />
             )}
           </React.Fragment>
