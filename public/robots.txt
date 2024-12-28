@@ -1,4 +1,4 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://gkp360.com/sitemap.xml
+Sitemap: https://gkp.com/api/sitemap/business-category-with-city-index
