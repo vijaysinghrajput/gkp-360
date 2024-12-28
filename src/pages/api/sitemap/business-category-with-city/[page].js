@@ -5,7 +5,7 @@ export default async function handler(req, res) {
   const domain = ProjectSetting.API_URL;
 
   const response = await fetch(
-    `${domain}/sitemap/business-category-with-city/${page}`
+    `${domain}/Sitemap/business_category_with_city/${page}`
   );
   const sitemap = await response.text();
 
