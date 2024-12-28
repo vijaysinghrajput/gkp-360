@@ -17,7 +17,7 @@ const BusinessBreadcrumbList = ({ currentCategory, city, state }) => {
   const CategorySchema = {
     "@context": "https://schema.org",
     "@type": "CategoryCode",
-    name: currentCategory.subcategory_name,
+    name: currentCategory?.subcategory_name,
     url: `${domain}/${currentCategory?.category_slug}/${city}/${state}/${currentCategory?.subcategory_id}/business`,
   };
 
@@ -44,7 +44,7 @@ const BusinessBreadcrumbList = ({ currentCategory, city, state }) => {
             {
               "@type": "ListItem",
               position: 3,
-              name: currentCategory.main_category_name,
+              name: currentCategory?.main_category_name,
               item: `${domain}/${currentCategory?.category_slug}/${city}/${state}/${currentCategory?.main_category_id}/business`,
             },
           ]
@@ -54,7 +54,7 @@ const BusinessBreadcrumbList = ({ currentCategory, city, state }) => {
             {
               "@type": "ListItem",
               position: 4,
-              name: `${currentCategory.subcategory_name} in ${toTitleCase(
+              name: `${currentCategory?.subcategory_name} in ${toTitleCase(
                 city
               )}, ${toTitleCase(state)}`,
               item: `${domain}/${currentCategory?.category_slug}/${city}/${state}/${currentCategory?.subcategory_id}/business`,
@@ -127,7 +127,7 @@ const BusinessBreadcrumbList = ({ currentCategory, city, state }) => {
                 "&:hover": { textDecoration: "underline" },
               }}
             >
-              {currentCategory.main_category_name}
+              {currentCategory?.main_category_name}
             </Typography>
           </Link>
         )}
@@ -138,7 +138,7 @@ const BusinessBreadcrumbList = ({ currentCategory, city, state }) => {
               fontWeight: 500,
             }}
           >
-            {currentCategory.subcategory_name} in {toTitleCase(city)},
+            {currentCategory?.subcategory_name} in {toTitleCase(city)},
             {toTitleCase(state)}
           </Typography>
         )}

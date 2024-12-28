@@ -33,12 +33,12 @@ const BusinessSubcategoryLists = ({
   // Determine the subcategories to display (10 initially or all)
   const displayedSubcategories = showAll
     ? subcategories
-    : subcategories.slice(0, 10);
+    : subcategories?.slice(0, 10);
 
   const seoTitle = `Explore ${toTitleCase(
     city
   )}'s Popular ${mainCategoryName} | ${
-    subcategories.length
+    subcategories?.length
   } Categories in ${toTitleCase(city)}, ${toTitleCase(state)}`;
 
   // Schema for subcategories
@@ -48,7 +48,7 @@ const BusinessSubcategoryLists = ({
     name: `Popular ${mainCategoryName} in ${toTitleCase(city)}, ${toTitleCase(
       state
     )}`,
-    itemListElement: subcategories.map((subcategory, index) => ({
+    itemListElement: subcategories?.map((subcategory, index) => ({
       "@type": "ListItem",
       position: index + 1,
       name: subcategory.category_name,
