@@ -41,7 +41,7 @@ const BusinessListCardRectangular = ({
         textAlign: "left",
       }}
     >
-      {businesses.length === 0 ? (
+      {businesses?.length === 0 ? (
         <Typography
           variant="h6"
           sx={{
@@ -70,7 +70,7 @@ const BusinessListCardRectangular = ({
 
           {/* Business Cards */}
           <Grid container spacing={3}>
-            {businesses.map((business) => (
+            {businesses?.map((business) => (
               <Grid
                 item
                 xs={12}

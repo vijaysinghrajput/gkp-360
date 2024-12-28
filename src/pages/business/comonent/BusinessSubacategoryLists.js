@@ -130,7 +130,7 @@ const BusinessSubcategoryLists = ({
       </List>
 
       {/* Show More / Show Less Button */}
-      {subcategories.length > 10 && (
+      {subcategories?.length > 10 && (
         <Button
           onClick={handleToggleShowMore}
           sx={{
