@@ -64,7 +64,7 @@ export default function BusinessStateCityList() {
         gutterBottom
         sx={{ fontWeight: "bold", marginBottom: 3 }}
       >
-        State and City List 1
+        State and City List
       </Typography>
       {stateCityData.map((state) => (
         <Accordion key={state.id} sx={{ marginBottom: 1 }}>
