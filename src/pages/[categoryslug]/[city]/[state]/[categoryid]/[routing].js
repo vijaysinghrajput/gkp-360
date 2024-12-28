@@ -2,9 +2,9 @@ import { useRouter } from "next/router";
 import { Box, CircularProgress, Typography } from "@mui/material";
 
 import BusinessByCategory from "../../../../../components/routepage/BusinessByCategory";
-// import JobByCategory from "../../../../../components/routepage/JobByCategory";
+import BusinessDetailsPage from "../../../../../components/routepage/BusinessDetailsPage";
 
-export default function DynamicCategoryPage() {
+export default function FiveParamterRouting() {
   const router = useRouter();
   const { categoryslug, city, state, categoryid, routing } = router.query;
 
@@ -33,16 +33,15 @@ export default function DynamicCategoryPage() {
           categoryid={categoryid}
         />
       );
-
-    // case "job":
-    //   return (
-    //     <JobByCategory
-    //       categoryslug={categoryslug}
-    //       city={city}
-    //       state={state}
-    //       categoryid={categoryid}
-    //     />
-    //   );
+    case "business-profile":
+      return (
+        <BusinessDetailsPage
+          titles={categoryslug}
+          city={city}
+          state={state}
+          listing_id={categoryid}
+        />
+      );
 
     // Add more cases as needed for additional routes
     default:

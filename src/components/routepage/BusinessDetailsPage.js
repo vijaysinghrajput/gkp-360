@@ -18,11 +18,11 @@ import BusinessSubacategoryLists from "../../pages/business/comonent/BusinessSub
 import BusinessListCardRactangular from "../../pages/business/comonent/BusinessListCardRactangular";
 import BusinessBreadcrumbList from "../../pages/business/comonent/BusinessBreadcrumbList";
 
-export default function BusinessByCategory({
-  categoryslug,
+export default function BusinessDetailsPage({
+  titles,
   city,
   state,
-  categoryid,
+  listing_id,
 }) {
   const [businesses, setBusinesses] = useState([]);
   const [subcategories, setSubcategories] = useState([]);

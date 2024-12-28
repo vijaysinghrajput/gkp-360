@@ -8,6 +8,7 @@ import {
   Divider,
 } from "@mui/material";
 import Link from "next/link";
+import Head from "next/head";
 
 const BusinessSubcategoryLists = ({
   mainCategoryName,
@@ -15,6 +16,8 @@ const BusinessSubcategoryLists = ({
   city,
   state,
 }) => {
+  const domain = process.env.NEXT_PUBLIC_NEXTAUTH_URL;
+
   const toTitleCase = (str) =>
     str
       ?.replace(/-/g, " ") // Replace hyphens with spaces
@@ -33,10 +36,25 @@ const BusinessSubcategoryLists = ({
     : subcategories.slice(0, 10);
 
   const seoTitle = `Explore ${toTitleCase(
-    toTitleCase(city)
+    city
   )}'s Popular ${mainCategoryName} | ${
     subcategories.length
-  } Categories in ${toTitleCase(city)} , ${toTitleCase(state)}`;
+  } Categories in ${toTitleCase(city)}, ${toTitleCase(state)}`;
+
+  // Schema for subcategories
+  const subcategoriesSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: `Popular ${mainCategoryName} in ${toTitleCase(city)}, ${toTitleCase(
+      state
+    )}`,
+    itemListElement: subcategories.map((subcategory, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: subcategory.category_name,
+      url: `${domain}/${subcategory?.category_name_slug}/${city}/${state}/${subcategory?.id}/business`,
+    })),
+  };
 
   return (
     <Box
@@ -48,6 +66,13 @@ const BusinessSubcategoryLists = ({
         textAlign: "left",
       }}
     >
+      {/* Inject JSON-LD Schema */}
+      <Head>
+        <script type="application/ld+json">
+          {JSON.stringify(subcategoriesSchema)}
+        </script>
+      </Head>
+
       {/* SEO-Friendly Title */}
       <Typography
         component="h1"
@@ -68,7 +93,7 @@ const BusinessSubcategoryLists = ({
             <Link
               href={`/${subcategory?.category_name_slug}/${city}/${state}/${subcategory?.id}/business`}
               passHref
-              style={{ textDecoration: "none" }} // Use "none" as a string
+              style={{ textDecoration: "none" }}
               title={`${subcategory.category_name} in ${toTitleCase(
                 city
               )}, ${toTitleCase(state)}`}

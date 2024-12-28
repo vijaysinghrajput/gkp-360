@@ -56,7 +56,7 @@ export default function BusinessSearchBox() {
         disabled={isSearchDisabled}
         sx={{ height: "56px" }}
       >
-        Search Business
+        Search Business1
       </Button>
     </Box>
   );

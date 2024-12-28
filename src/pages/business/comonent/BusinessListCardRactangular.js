@@ -25,8 +25,10 @@ const BusinessListCardRectangular = ({
       .toLowerCase() // Convert the entire string to lowercase
       .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize the first letter of each word
 
-  const handleCardClick = (businessId) => {
-    router.push(`/business/${businessId}`);
+  const handleCardClick = (listing_url, listing_id) => {
+    router.push(
+      `/${listing_url}/${city}/${state}/${listing_id}/business-profile`
+    );
   };
 
   return (
@@ -79,13 +81,16 @@ const BusinessListCardRectangular = ({
                 }}
               >
                 <Card
-                  onClick={() => handleCardClick(business.id)}
+                  onClick={() =>
+                    handleCardClick(business.listing_url, business.listing_id)
+                  }
                   sx={{
                     display: "flex",
                     flexDirection: "column",
                     borderRadius: 3,
                     boxShadow: 2,
                     transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                    cursor: "pointer",
                     "&:hover": {
                       transform: "scale(1.02)",
                       boxShadow: 5,
@@ -153,3 +158,60 @@ const BusinessListCardRectangular = ({
 };
 
 export default BusinessListCardRectangular;
+
+// SCHEMAS
+
+// Local Business Schema
+const LocalBusinessSchema = {
+  id: "string",
+  name: "string",
+  logo: "string",
+  full_address: "string",
+  city: "string",
+  state: "string",
+  primary_category: "string",
+  contact_info: {
+    phone: "string",
+    email: "string",
+  },
+};
+
+// Item List Schema
+const ItemListSchema = {
+  id: "string",
+  title: "string",
+  description: "string",
+  image_url: "string",
+  category: "string",
+  subcategory: "string",
+  price: "number",
+};
+
+// Business Listings Schema
+const BusinessListingsSchema = {
+  listing_id: "string",
+  user_id: "string",
+  listing_type: "string",
+  service_type: "string",
+  listing_url: "string",
+  title: "string",
+  logo: "string",
+  primary_category: "string",
+  about: "string",
+  full_address: "string",
+  city: "string",
+  state: "string",
+  contact_info: {
+    phone: "string",
+    email: "string",
+    website: "string",
+  },
+  social_links: {
+    facebook: "string",
+    instagram: "string",
+    twitter: "string",
+    youtube: "string",
+  },
+  status: "string",
+  visit_count: "number",
+};
