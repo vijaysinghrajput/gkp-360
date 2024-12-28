@@ -39,7 +39,7 @@ const BusinessListCardRectangular = ({
   const ItemListSchema = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    itemListElement: businesses.map((business, index) => ({
+    itemListElement: businesses?.map((business, index) => ({
       "@type": "ListItem",
       position: index + 1,
       name: business.title,
