@@ -67,13 +67,6 @@ const BusinessSubcategoryLists = ({
         textAlign: "left",
       }}
     >
-      {/* Inject JSON-LD Schema */}
-      <Head>
-        <script type="application/ld+json">
-          {JSON.stringify(subcategoriesSchema)}
-        </script>
-      </Head>
-
       {/* SEO-Friendly Title */}
       <Typography
         component="h1"
