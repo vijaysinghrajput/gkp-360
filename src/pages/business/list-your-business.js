@@ -9,6 +9,7 @@ import {
   Divider,
   Chip,
   Collapse,
+  CircularProgress,
 } from "@mui/material";
 import {
   CheckCircleOutline as CheckIcon,
@@ -24,15 +25,14 @@ const ListYourBusiness = () => {
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [expandedPlans, setExpandedPlans] = useState({}); // Track which plans are expanded
+  const [expandedPlans, setExpandedPlans] = useState({});
 
   useEffect(() => {
-    // Fetch plans from the API
     axios
       .get(`${ProjectSetting.API_URL}/Website/getPlans`)
       .then((response) => {
-        if (response.data.status === "success") {
-          setPlans(response.data.data); // Set plans from the API response
+        if (response.data.status == "success") {
+          setPlans(response.data.data);
         } else {
           setError(response.data.message);
         }
@@ -63,7 +63,7 @@ const ListYourBusiness = () => {
           height: "100vh",
         }}
       >
-        <Typography variant="h6">Loading Plans...</Typography>
+        <CircularProgress />
       </Box>
     );
   }
@@ -88,51 +88,74 @@ const ListYourBusiness = () => {
   return (
     <Box
       sx={{
-        padding: "20px",
         background: "#f9f9f9",
         minHeight: "100vh",
       }}
     >
-      <Typography
-        variant="h3"
-        align="center"
+      {/* Header */}
+      <Box
         sx={{
-          marginBottom: "10px",
-          fontWeight: "bold",
+          background: "linear-gradient(90deg, #4CAF50, #81C784)",
+          padding: "20px",
+          color: "#fff",
+          textAlign: "center",
         }}
       >
-        Plans & Pricing
-      </Typography>
-      <Typography
-        variant="subtitle1"
-        align="center"
-        sx={{
-          marginBottom: "30px",
-        }}
-      >
-        Select a Plan to Start Growing your Business Online
-      </Typography>
+        <Typography
+          variant="h4"
+          sx={{
+            fontWeight: "bold",
+          }}
+        >
+          Affordable Plans to List Your Business Online
+        </Typography>
+        <Typography
+          variant="subtitle1"
+          sx={{
+            marginTop: "10px",
+            fontSize: "1rem",
+          }}
+        >
+          Choose a plan that suits your business and grow your online presence.
+        </Typography>
+      </Box>
 
-      <Grid container spacing={3} sx={{ justifyContent: "center" }}>
-        {plans.map((plan) => (
-          <Grid item xs={12} sm={6} md={4} key={plan.plan_id}>
+      {/* Plans Section */}
+      <Grid
+        container
+        spacing={3}
+        sx={{
+          padding: "20px",
+          justifyContent: "center",
+        }}
+      >
+        {plans.map((plan, index) => (
+          <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
             <Card
               sx={{
-                border: "2px solid #ddd",
-                boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+                border: `2px solid ${index % 2 == 0 ? "#4CAF50" : "#FFC107"}`,
+                boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
                 borderRadius: "16px",
-                textAlign: "center",
-                padding: "20px",
+                display: "flex",
+                flexDirection: "column",
+                overflow: "hidden",
                 transition: "transform 0.3s ease, box-shadow 0.3s ease",
                 "&:hover": {
                   transform: "scale(1.05)",
-                  boxShadow: "0 6px 15px rgba(0,0,0,0.2)",
+                  boxShadow: "0 6px 15px rgba(0, 0, 0, 0.2)",
                 },
               }}
             >
-              <CardContent>
+              <CardContent
+                sx={{
+                  flex: 1,
+                  overflowY: "auto",
+                  padding: "20px",
+                  textAlign: "center",
+                }}
+              >
                 <Typography
-                  variant="h5"
+                  variant="h6"
                   sx={{
                     fontWeight: "bold",
                     marginBottom: "10px",
@@ -143,61 +166,21 @@ const ListYourBusiness = () => {
                 <Typography
                   variant="body1"
                   sx={{
-                    whiteSpace: "pre-wrap",
                     marginBottom: "20px",
-                    fontSize: "1.1rem",
+                    fontSize: "1rem",
                   }}
                 >
                   ₹{plan.price} for {plan.duration}
                 </Typography>
-
-                <Divider sx={{ marginBottom: "20px" }} />
-
-                {Object.entries(plan)
-                  .slice(0, 5)
-                  .map(([key, value]) => (
-                    <Box
-                      key={key}
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="space-between"
-                      marginBottom="10px"
-                    >
-                      <Box display="flex" alignItems="center" gap={1}>
-                        <InfoIcon fontSize="small" />
-                        <Typography variant="body2">
-                          {key
-                            .replace(/_/g, " ")
-                            .replace(/\b\w/g, (c) => c.toUpperCase())}
-                        </Typography>
-                      </Box>
-                      {typeof value === "boolean" ||
-                      value === 1 ||
-                      value === 0 ? (
-                        value ? (
-                          <CheckIcon color="success" />
-                        ) : (
-                          <CancelIcon color="error" />
-                        )
-                      ) : (
-                        <Chip
-                          label={value}
-                          size="small"
-                          sx={{
-                            fontWeight: "bold",
-                          }}
-                        />
-                      )}
-                    </Box>
-                  ))}
-
-                <Collapse
-                  in={expandedPlans[plan.plan_id]}
-                  timeout="auto"
-                  unmountOnExit
+                <Divider sx={{ marginBottom: "15px" }} />
+                <Box
+                  sx={{
+                    maxHeight: "200px",
+                    overflowY: "auto",
+                  }}
                 >
                   {Object.entries(plan)
-                    .slice(5)
+                    .filter(([key]) => key !== "plan_id")
                     .map(([key, value]) => (
                       <Box
                         key={key}
@@ -206,7 +189,12 @@ const ListYourBusiness = () => {
                         justifyContent="space-between"
                         marginBottom="10px"
                       >
-                        <Box display="flex" alignItems="center" gap={1}>
+                        <Box
+                          display="flex"
+                          alignItems="center"
+                          gap={1}
+                          sx={{ flex: 1, overflowWrap: "break-word" }}
+                        >
                           <InfoIcon fontSize="small" />
                           <Typography variant="body2">
                             {key
@@ -214,10 +202,8 @@ const ListYourBusiness = () => {
                               .replace(/\b\w/g, (c) => c.toUpperCase())}
                           </Typography>
                         </Box>
-                        {typeof value === "boolean" ||
-                        value === 1 ||
-                        value === 0 ? (
-                          value ? (
+                        {value == 1 || value == 0 ? (
+                          value == 1 ? (
                             <CheckIcon color="success" />
                           ) : (
                             <CancelIcon color="error" />
@@ -228,49 +214,36 @@ const ListYourBusiness = () => {
                             size="small"
                             sx={{
                               fontWeight: "bold",
+                              maxWidth: "50%",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
                             }}
                           />
                         )}
                       </Box>
                     ))}
-                </Collapse>
+                </Box>
+              </CardContent>
 
+              {/* Footer */}
+              <Box
+                sx={{
+                  backgroundColor: "#f1f1f1",
+                  padding: "16px",
+                  borderTop: "1px solid #ddd",
+                }}
+              >
                 <Button
-                  onClick={() => toggleExpand(plan.plan_id)}
-                  variant="outlined"
+                  variant="contained"
+                  color="primary"
                   fullWidth
-                  endIcon={
-                    expandedPlans[plan.plan_id] ? (
-                      <ExpandLessIcon />
-                    ) : (
-                      <ExpandMoreIcon />
-                    )
-                  }
                   sx={{
-                    marginTop: "10px",
-                    padding: "8px",
                     borderRadius: "50px",
                   }}
                 >
-                  {expandedPlans[plan.plan_id]
-                    ? "View Less Features"
-                    : "View More Features"}
+                  Select Plan
                 </Button>
-              </CardContent>
-
-              <Button
-                variant="contained"
-                color="primary"
-                fullWidth
-                sx={{
-                  marginTop: "10px",
-                  padding: "12px",
-                  fontSize: "1rem",
-                  borderRadius: "50px",
-                }}
-              >
-                Select
-              </Button>
+              </Box>
             </Card>
           </Grid>
         ))}
