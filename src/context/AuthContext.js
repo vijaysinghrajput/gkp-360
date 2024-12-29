@@ -1,18 +1,16 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { useRouter } from "next/router";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const router = useRouter();
+  const [user, setUser] = useState(null); // User state
+  const [loading, setLoading] = useState(true); // Loading state for auth
 
   useEffect(() => {
-    // Fetch user state (e.g., from localStorage or an API)
-    const token = localStorage.getItem("authToken");
-    if (token) {
-      setUser({ token }); // Simulate user object
+    // Simulate user loading from localStorage or API
+    const storedUser = JSON.parse(localStorage.getItem("authUser"));
+    if (storedUser) {
+      setUser(storedUser);
     }
     setLoading(false);
   }, []);
@@ -25,23 +23,21 @@ export function AuthProvider({ children }) {
       body: JSON.stringify({ email, password }),
     });
     const data = await response.json();
-    if (data.token) {
-      localStorage.setItem("authToken", data.token);
-      setUser({ token: data.token });
-      router.push("/dashboard");
-    } else {
-      alert("Invalid login credentials");
+    if (data.status) {
+      setUser(data.data);
+      localStorage.setItem("authUser", JSON.stringify(data.data));
+      return true;
     }
+    return false;
   };
 
   const logout = () => {
-    localStorage.removeItem("authToken");
+    localStorage.removeItem("authUser");
     setUser(null);
-    router.push("/login");
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, setUser, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

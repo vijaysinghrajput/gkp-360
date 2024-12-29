@@ -58,89 +58,94 @@ const BusinessSubcategoryLists = ({
   };
 
   return (
-    <Box
-      sx={{
-        backgroundColor: "#fff",
-        borderRadius: "8px",
-        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
-        padding: "16px",
-        textAlign: "left",
-      }}
-    >
-      {/* SEO-Friendly Title */}
-      <Typography
-        component="h1"
+    <>
+      <script type="application/ld+json">
+        {JSON.stringify(subcategoriesSchema)}
+      </script>
+      <Box
         sx={{
-          fontSize: "18px",
-          fontWeight: 600,
-          marginBottom: "16px",
-          color: "#333",
+          backgroundColor: "#fff",
+          borderRadius: "8px",
+          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+          padding: "16px",
+          textAlign: "left",
         }}
       >
-        {seoTitle}
-      </Typography>
-
-      {/* List of Subcategories */}
-      <List sx={{ padding: 0 }}>
-        {displayedSubcategories?.map((subcategory, index) => (
-          <React.Fragment key={subcategory.id}>
-            <Link
-              href={`/${subcategory?.category_name_slug}/${city}/${state}/${subcategory?.id}/business`}
-              passHref
-              style={{ textDecoration: "none" }}
-              title={`${subcategory.category_name} in ${toTitleCase(
-                city
-              )}, ${toTitleCase(state)}`}
-            >
-              <ListItem
-                component="a"
-                sx={{
-                  textDecoration: "none",
-                  color: "#4CAF50",
-                  "&:hover": {
-                    color: "#FFC107",
-                  },
-                  padding: "8px 0",
-                  cursor: "pointer",
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontSize: "14px",
-                    fontWeight: 500,
-                  }}
-                >
-                  {`${subcategory.category_name} in ${toTitleCase(
-                    city
-                  )}, ${toTitleCase(state)}`}
-                </Typography>
-              </ListItem>
-            </Link>
-            {index !== displayedSubcategories?.length - 1 && (
-              <Divider sx={{ borderColor: "#e0e0e0" }} />
-            )}
-          </React.Fragment>
-        ))}
-      </List>
-
-      {/* Show More / Show Less Button */}
-      {subcategories?.length > 10 && (
-        <Button
-          onClick={handleToggleShowMore}
+        {/* SEO-Friendly Title */}
+        <Typography
+          component="h1"
           sx={{
-            marginTop: "12px",
-            fontSize: "14px",
-            color: "#007bff",
-            textTransform: "none",
-            "&:hover": {
-              textDecoration: "underline",
-            },
+            fontSize: "18px",
+            fontWeight: 600,
+            marginBottom: "16px",
+            color: "#333",
           }}
         >
-          {showAll ? "Show Less" : "Show More"}
-        </Button>
-      )}
-    </Box>
+          {seoTitle}
+        </Typography>
+
+        {/* List of Subcategories */}
+        <List sx={{ padding: 0 }}>
+          {displayedSubcategories?.map((subcategory, index) => (
+            <React.Fragment key={subcategory.id}>
+              <Link
+                href={`/${subcategory?.category_name_slug}/${city}/${state}/${subcategory?.id}/business`}
+                passHref
+                style={{ textDecoration: "none" }}
+                title={`${subcategory.category_name} in ${toTitleCase(
+                  city
+                )}, ${toTitleCase(state)}`}
+              >
+                <ListItem
+                  component="a"
+                  sx={{
+                    textDecoration: "none",
+                    color: "#4CAF50",
+                    "&:hover": {
+                      color: "#FFC107",
+                    },
+                    padding: "8px 0",
+                    cursor: "pointer",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: "14px",
+                      fontWeight: 500,
+                    }}
+                  >
+                    {`${subcategory.category_name} in ${toTitleCase(
+                      city
+                    )}, ${toTitleCase(state)}`}
+                  </Typography>
+                </ListItem>
+              </Link>
+              {index !== displayedSubcategories?.length - 1 && (
+                <Divider sx={{ borderColor: "#e0e0e0" }} />
+              )}
+            </React.Fragment>
+          ))}
+        </List>
+
+        {/* Show More / Show Less Button */}
+        {subcategories?.length > 10 && (
+          <Button
+            onClick={handleToggleShowMore}
+            sx={{
+              marginTop: "12px",
+              fontSize: "14px",
+              color: "#007bff",
+              textTransform: "none",
+              "&:hover": {
+                textDecoration: "underline",
+              },
+            }}
+          >
+            {showAll ? "Show Less" : "Show More"}
+          </Button>
+        )}
+      </Box>
+    </>
   );
 };
 

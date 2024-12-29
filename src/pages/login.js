@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { signIn, useSession } from "next-auth/react";
 import {
   Box,
   TextField,
@@ -10,28 +9,34 @@ import {
   Divider,
   Grid,
 } from "@mui/material";
-import GoogleIcon from "@mui/icons-material/Google";
-import FacebookIcon from "@mui/icons-material/Facebook";
 import { ProjectSetting } from "../config/ProjectSetting";
+import { useAuth } from "../context/AuthContext"; // Import AuthContext
 
 export default function LoginPage() {
-  const [identifier, setIdentifier] = useState(""); // Email or mobile
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState(false);
-  const { data: session } = useSession();
   const router = useRouter();
+
+  const { user, setUser } = useAuth(); // Use AuthContext
+
+  // Redirect authenticated users to dashboard
+  if (user) {
+    router.push("/dashboard");
+    return null;
+  }
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setErrors({});
     setSuccess(false);
 
-    const trimmedIdentifier = identifier.trim();
+    const trimmedEmail = email.trim();
     const trimmedPassword = password.trim();
 
-    if (!trimmedIdentifier || !trimmedPassword) {
-      setErrors({ general: "Email/Mobile and Password are required." });
+    if (!trimmedEmail || !trimmedPassword) {
+      setErrors({ general: "Email and Password are required." });
       return;
     }
 
@@ -40,7 +45,7 @@ export default function LoginPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          identifier: trimmedIdentifier,
+          email: trimmedEmail,
           password: trimmedPassword,
         }),
       });
@@ -50,12 +55,10 @@ export default function LoginPage() {
       if (data.status) {
         setSuccess(true);
 
-        // Save user data for authentication
-        localStorage.setItem("user", JSON.stringify(data.data));
-        console.log("Logged-in User:", data.data);
-
-        // Redirect to the dashboard
-        router.push("/dashboard");
+        setUser(data.data); // Save user data in AuthContext
+        localStorage.setItem("authUser", JSON.stringify(data.data));
+        // setMessage("Signup successful! Redirecting to dashboard...");
+        setTimeout(() => router.push("/dashboard"), 2000);
       } else {
         setErrors({ general: data.message || "Login failed." });
       }
@@ -107,13 +110,13 @@ export default function LoginPage() {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
-                label="Email or Mobile"
+                label="Email"
                 variant="outlined"
                 fullWidth
-                value={identifier}
-                onChange={(e) => setIdentifier(e.target.value)}
-                error={!!errors.identifier}
-                helperText={errors.identifier}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                error={!!errors.email}
+                helperText={errors.email}
                 required
               />
             </Grid>
@@ -147,38 +150,33 @@ export default function LoginPage() {
         </form>
         <Typography
           variant="body2"
-          sx={{ marginTop: 2, textAlign: "right", cursor: "pointer" }}
+          sx={{
+            marginTop: 2,
+            textAlign: "right",
+            cursor: "pointer",
+            color: "#4caf50",
+            "&:hover": { textDecoration: "underline" },
+          }}
           onClick={() => router.push("/forgot-password")}
         >
           Forgot Password?
         </Typography>
-        <Divider sx={{ marginY: 2 }}>OR</Divider>
+        <Divider sx={{ marginY: 2 }}>Don't have an account?</Divider>
         <Button
-          variant="contained"
-          startIcon={<GoogleIcon />}
+          variant="outlined"
           fullWidth
           sx={{
-            marginBottom: 2,
-            backgroundColor: "#DB4437",
-            color: "#fff",
-            "&:hover": { backgroundColor: "#C33C28" },
+            padding: 1.5,
+            borderColor: "#4caf50",
+            color: "#4caf50",
+            "&:hover": {
+              backgroundColor: "#e8f5e9",
+              borderColor: "#4caf50",
+            },
           }}
-          onClick={() => signIn("google")}
+          onClick={() => router.push("/signup")}
         >
-          Login with Google
-        </Button>
-        <Button
-          variant="contained"
-          startIcon={<FacebookIcon />}
-          fullWidth
-          sx={{
-            backgroundColor: "#4267B2",
-            color: "#fff",
-            "&:hover": { backgroundColor: "#365899" },
-          }}
-          onClick={() => signIn("facebook")}
-        >
-          Login with Facebook
+          Signup
         </Button>
       </Box>
     </Box>

@@ -36,25 +36,25 @@ const BusinessListCardRectangular = ({
   };
 
   // Schema for the item list
-  const ItemListSchema = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    itemListElement: businesses?.map((business, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      name: business.title,
-      url: `${domain}/${business.listing_url}/${city}/${state}/${business.listing_id}/business-profile`,
-      image: business.logo || ProjectSetting.DEMO_IMG,
-    })),
-  };
+  // const ItemListSchema = {
+  //   "@context": "https://schema.org",
+  //   "@type": "ItemList",
+  //   itemListElement: businesses?.map((business, index) => ({
+  //     "@type": "ListItem",
+  //     position: index + 1,
+  //     name: business.title,
+  //     url: `${domain}/${business.listing_url}/${city}/${state}/${business.listing_id}/business-profile`,
+  //     image: business.logo || ProjectSetting.DEMO_IMG,
+  //   })),
+  // };
 
   return (
     <>
       <Head>
         {/* Embedding JSON-LD schema */}
-        <script type="application/ld+json">
+        {/* <script type="application/ld+json">
           {JSON.stringify(ItemListSchema)}
-        </script>
+        </script> */}
       </Head>
       <Box
         sx={{

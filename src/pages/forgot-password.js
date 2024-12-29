@@ -3,30 +3,6 @@ import { useRouter } from "next/router";
 import { Box, TextField, Button, Typography, Alert, Grid } from "@mui/material";
 import { ProjectSetting } from "../config/ProjectSetting";
 
-const validatePassword = (password) => {
-  const minLength = 5;
-  const hasNumber = /\d/;
-  const hasSpecialChar = /[@$!%*?&]/;
-
-  if (password.length < minLength) {
-    return "Password must be at least 5 characters long.";
-  }
-  if (!hasNumber.test(password)) {
-    return "Password must contain at least one number.";
-  }
-  if (!hasSpecialChar.test(password)) {
-    return "Password must contain at least one special character.";
-  }
-  return "";
-};
-
-const validateOtp = (otp) => {
-  if (otp.length !== 4 || !/^\d+$/.test(otp)) {
-    return "OTP must be a 4-digit number.";
-  }
-  return "";
-};
-
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
@@ -73,20 +49,13 @@ export default function ForgotPasswordPage() {
     setErrors({});
     setMessage("");
 
-    const otpError = validateOtp(otp);
-    if (otpError) {
-      setErrors({ otp: otpError });
-      return;
-    }
-
-    const passwordError = validatePassword(newPassword);
-    if (passwordError) {
-      setErrors({ newPassword: passwordError });
+    if (!otp.trim() || !newPassword.trim() || !confirmPassword.trim()) {
+      setErrors({ general: "All fields are required." });
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setErrors({ confirmPassword: "Passwords do not match." });
+      setErrors({ password: "Passwords do not match." });
       return;
     }
 
@@ -185,8 +154,6 @@ export default function ForgotPasswordPage() {
               fullWidth
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
-              error={!!errors.otp}
-              helperText={errors.otp}
               required
               sx={{ marginBottom: 2 }}
             />
@@ -197,8 +164,6 @@ export default function ForgotPasswordPage() {
               fullWidth
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              error={!!errors.newPassword}
-              helperText={errors.newPassword}
               required
               sx={{ marginBottom: 2 }}
             />
@@ -209,8 +174,6 @@ export default function ForgotPasswordPage() {
               fullWidth
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              error={!!errors.confirmPassword}
-              helperText={errors.confirmPassword}
               required
             />
             <Button

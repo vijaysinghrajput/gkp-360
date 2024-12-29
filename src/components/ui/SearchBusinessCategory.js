@@ -80,7 +80,7 @@ export default function SearchBusinessCategory({ onCategorySelect }) {
   };
 
   return (
-    <Box>
+    <>
       <Autocomplete
         options={categories.length > 0 ? categories : defaultCategories}
         loading={loading}
@@ -115,6 +115,6 @@ export default function SearchBusinessCategory({ onCategorySelect }) {
       />
 
       {/* Default Categories (Optional Display Below Search) */}
-    </Box>
+    </>
   );
 }

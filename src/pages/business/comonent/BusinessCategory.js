@@ -75,9 +75,6 @@ export default function BusinessList() {
     >
       <Box
         sx={{
-          position: "sticky",
-          top: "64px",
-          zIndex: 10,
           backgroundColor: "#fff",
           padding: "10px 20px",
           borderBottom: "1px solid #ddd",

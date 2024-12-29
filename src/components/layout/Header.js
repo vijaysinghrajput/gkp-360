@@ -21,12 +21,21 @@ import LocationCityIcon from "@mui/icons-material/LocationCity";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CloseIcon from "@mui/icons-material/Close";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { useAuth } from "../../context/AuthContext"; // Import AuthContext
+import { useRouter } from "next/router";
 
 export default function Header() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const { user, logout } = useAuth(); // Get user and logout from AuthContext
+  const router = useRouter();
 
   const toggleDrawer = (open) => () => {
     setDrawerOpen(open);
+  };
+
+  const handleLogout = () => {
+    logout(); // Call logout function from AuthContext
   };
 
   const menuItems = [
@@ -36,7 +45,6 @@ export default function Header() {
     { label: "Jobs", icon: <WorkIcon />, link: "/jobs" },
     { label: "Properties", icon: <LocationCityIcon />, link: "/properties" },
     { label: "Contact", icon: <ContactMailIcon />, link: "/contact" },
-    { label: "Login / Profile", icon: <AccountCircleIcon />, link: "/login" },
   ];
 
   const drawerMenu = (
@@ -85,6 +93,23 @@ export default function Header() {
             <ListItemText primary={item.label} />
           </ListItem>
         ))}
+        <ListItem
+          button
+          onClick={
+            user ? handleLogout : () => (window.location.href = "/login")
+          }
+          sx={{
+            transition: "0.3s",
+            "&:hover": {
+              backgroundColor: "rgba(255, 255, 255, 0.1)",
+            },
+          }}
+        >
+          <ListItemIcon sx={{ color: "#fff" }}>
+            {user ? <LogoutIcon /> : <AccountCircleIcon />}
+          </ListItemIcon>
+          <ListItemText primary={user ? "Logout" : "Login"} />
+        </ListItem>
       </List>
     </Box>
   );
@@ -103,6 +128,7 @@ export default function Header() {
             cursor: "pointer",
             textShadow: "1px 1px 3px rgba(0,0,0,0.3)",
           }}
+          onClick={() => (window.location.href = "/")}
         >
           GKP 360
         </Typography>
@@ -123,6 +149,19 @@ export default function Header() {
               {item.label}
             </Button>
           ))}
+          <Button
+            color="inherit"
+            onClick={user ? handleLogout : () => router.push("/login")}
+            sx={{
+              marginX: 1,
+              fontWeight: "bold",
+              "&:hover": {
+                color: "#4CAF50",
+              },
+            }}
+          >
+            {user ? "Logout" : "Login"}
+          </Button>
         </Box>
         <Box sx={{ display: { xs: "flex", md: "none" } }}>
           <IconButton

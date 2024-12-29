@@ -14,6 +14,32 @@ const BusinessBreadcrumbList = ({ currentCategory, city, state }) => {
       .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize the first letter of each word
 
   const domain = ProjectSetting.COMPANY_WEBSITE;
+  const description = `Explore ${
+    currentCategory?.subcategory_name || "businesses"
+  } in ${toTitleCase(city)}, ${toTitleCase(
+    state
+  )}. Discover top-rated services, offer, and reviews on ${
+    ProjectSetting.APP_NAME
+  }.`;
+
+  const WebPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: `${currentCategory?.subcategory_name || ""} in ${toTitleCase(
+      city
+    )}, ${toTitleCase(state)} | ${ProjectSetting.APP_NAME}`,
+    url: `${domain}/${currentCategory?.category_slug}/${city}/${state}/${currentCategory?.subcategory_id}/business`,
+    description: description,
+    publisher: {
+      "@type": "Organization",
+      name: ProjectSetting.APP_NAME,
+      url: domain,
+      logo: {
+        "@type": "ImageObject",
+        url: ProjectSetting.LOGO_URL,
+      },
+    },
+  };
 
   const CategorySchema = {
     "@context": "https://schema.org",
@@ -21,8 +47,6 @@ const BusinessBreadcrumbList = ({ currentCategory, city, state }) => {
     name: currentCategory?.subcategory_name,
     url: `${domain}/${currentCategory?.category_slug}/${city}/${state}/${currentCategory?.subcategory_id}/business`,
   };
-
-  // Construct the breadcrumb schema.org data
 
   const breadcrumbList = {
     "@context": "https://schema.org",
@@ -67,12 +91,14 @@ const BusinessBreadcrumbList = ({ currentCategory, city, state }) => {
 
   return (
     <>
-      {/* JSON-LD for breadcrumbs */}
+      {/* JSON-LD for schemas */}
       <Head>
+        <script type="application/ld+json">
+          {JSON.stringify(WebPageSchema)}
+        </script>
         <script type="application/ld+json">
           {JSON.stringify(breadcrumbList)}
         </script>
-
         <script type="application/ld+json">
           {JSON.stringify(CategorySchema)}
         </script>
