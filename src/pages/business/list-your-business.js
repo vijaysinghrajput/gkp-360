@@ -8,30 +8,34 @@ import {
   Button,
   Divider,
   Chip,
-  Collapse,
   CircularProgress,
+  Modal,
 } from "@mui/material";
 import {
   CheckCircleOutline as CheckIcon,
   Cancel as CancelIcon,
   Info as InfoIcon,
-  ExpandMore as ExpandMoreIcon,
-  ExpandLess as ExpandLessIcon,
 } from "@mui/icons-material";
 import axios from "axios";
 import { ProjectSetting } from "../../config/ProjectSetting";
+import { useAuth } from "../../context/AuthContext"; // Import AuthContext
+import { useRouter } from "next/router";
+import LoginComponent from "../business/comonent/LoginComponent";
 
 const ListYourBusiness = () => {
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [expandedPlans, setExpandedPlans] = useState({});
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const [selectedPlanId, setSelectedPlanId] = useState(null);
+  const { user } = useAuth(); // Use AuthContext
+  const router = useRouter(); // Initialize useRouter
 
   useEffect(() => {
     axios
       .get(`${ProjectSetting.API_URL}/Website/getPlans`)
       .then((response) => {
-        if (response.data.status == "success") {
+        if (response.data.status === "success") {
           setPlans(response.data.data);
         } else {
           setError(response.data.message);
@@ -46,11 +50,20 @@ const ListYourBusiness = () => {
       });
   }, []);
 
-  const toggleExpand = (planId) => {
-    setExpandedPlans((prev) => ({
-      ...prev,
-      [planId]: !prev[planId],
-    }));
+  const handleSelectPlan = (planId) => {
+    if (!user) {
+      setSelectedPlanId(planId);
+      setLoginModalOpen(true);
+    } else {
+      router.push(`/business/post-business?planId=${planId}`);
+    }
+  };
+
+  const handleLoginSuccess = () => {
+    setLoginModalOpen(false);
+    if (selectedPlanId) {
+      router.push(`/business/post-business?planId=${selectedPlanId}`);
+    }
   };
 
   if (loading) {
@@ -133,7 +146,7 @@ const ListYourBusiness = () => {
           <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
             <Card
               sx={{
-                border: `2px solid ${index % 2 == 0 ? "#4CAF50" : "#FFC107"}`,
+                border: `2px solid ${index % 2 === 0 ? "#4CAF50" : "#FFC107"}`,
                 boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
                 borderRadius: "16px",
                 display: "flex",
@@ -202,8 +215,8 @@ const ListYourBusiness = () => {
                               .replace(/\b\w/g, (c) => c.toUpperCase())}
                           </Typography>
                         </Box>
-                        {value == 1 || value == 0 ? (
-                          value == 1 ? (
+                        {value === 1 || value === 0 ? (
+                          value === 1 ? (
                             <CheckIcon color="success" />
                           ) : (
                             <CancelIcon color="error" />
@@ -240,6 +253,7 @@ const ListYourBusiness = () => {
                   sx={{
                     borderRadius: "50px",
                   }}
+                  onClick={() => handleSelectPlan(plan.plan_id)}
                 >
                   Select Plan
                 </Button>
@@ -248,6 +262,20 @@ const ListYourBusiness = () => {
           </Grid>
         ))}
       </Grid>
+
+      {/* Login Modal */}
+      <Modal
+        open={loginModalOpen}
+        onClose={() => setLoginModalOpen(false)}
+        aria-labelledby="login-modal-title"
+        aria-describedby="login-modal-description"
+      >
+        <LoginComponent
+          isModal
+          onSuccess={handleLoginSuccess}
+          onClose={() => setLoginModalOpen(false)}
+        />
+      </Modal>
     </Box>
   );
 };
