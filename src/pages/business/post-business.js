@@ -13,6 +13,7 @@ import { ProjectSetting } from "../../config/ProjectSetting";
 import SelectBusinessCategoryAndSubCategory from "../business/comonent/SelectBusinessCategoryAndSubCategory";
 import BusinessAddressMap from "../business/comonent/BusinessAddressMap";
 import axios from "axios";
+import { useAuth } from "../../context/AuthContext"; // Import AuthContext
 
 const PostBusiness = () => {
   const router = useRouter();
@@ -33,6 +34,7 @@ const PostBusiness = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedSubCategories, setSelectedSubCategories] = useState([]);
+  const { user } = useAuth(); // Use AuthContext
 
   const isSmallScreen = useMediaQuery("(max-width:600px)");
 
@@ -50,7 +52,7 @@ const PostBusiness = () => {
         );
         const data = await response.json();
 
-        if (data.status === "success") {
+        if (data.status == "success") {
           setPlanDetails(data.data);
         } else {
           setErrors((prev) => ({ ...prev, general: data.message }));
@@ -73,18 +75,29 @@ const PostBusiness = () => {
 
   const handleSubmit = async () => {
     const newErrors = {};
+
+    // Validate business name
     if (!businessName.trim()) {
       newErrors.businessName = "Business name is required.";
     }
+
+    // Validate selected categories
     if (selectedCategories.length === 0) {
       newErrors.categories = "At least one business category is required.";
     }
+
+    // Validate selected subcategories
     if (selectedSubCategories.length === 0) {
       newErrors.subCategories =
         "At least one business subcategory is required.";
     }
+
+    // Validate other fields
     if (!street.trim()) {
       newErrors.street = "Street is required.";
+    }
+    if (!area.trim()) {
+      newErrors.area = "Area is required.";
     }
     if (!city.trim()) {
       newErrors.city = "City is required.";
@@ -95,10 +108,12 @@ const PostBusiness = () => {
     if (!pincode.trim() || pincode.length < 6) {
       newErrors.pincode = "Valid pincode is required.";
     }
-    if (!mobile.trim() || mobile.length < 10) {
+    const mobileRegex = /^[6-9]\d{9}$/; // Indian mobile number validation
+    if (!mobile.trim() || !mobileRegex.test(mobile)) {
       newErrors.mobile = "Valid mobile number is required.";
     }
 
+    // Stop if validation errors exist
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
@@ -107,29 +122,66 @@ const PostBusiness = () => {
     setErrors({});
     setIsSubmitting(true);
 
+    // Generate unique listing ID
+    const generateUniqueID = () => {
+      const timestamp = new Date().getTime();
+      return `${user.id}-${timestamp}-${Math.floor(Math.random() * 100)}`;
+    };
+
+    const listingID = generateUniqueID();
+
+    // Generate SEO-friendly URL
+    const listingUrl = `${businessName} ${area} ${city} ${state} ${listingID}`
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .trim();
+
     try {
       const payload = {
-        planId,
-        businessName,
-        categories: selectedCategories.map((cat) => cat.value),
-        subCategories: selectedSubCategories.map((subCat) => subCat.value),
-        address: `${street}, ${city}, ${state}, ${pincode}`,
-        mobile,
+        planId: planId,
+        listing_id: listingID,
+        user_id: user.id,
+        listing_type: "Business",
+        service_type: "Products and Services",
+        listing_url: listingUrl,
+        title: businessName,
+        category: selectedCategories.map((cat) => ({ value: cat.value })),
+        subCategory: selectedSubCategories.map((subCat) => ({
+          value: subCat.value,
+        })),
+        street,
+        area,
+        city,
+        zip: pincode,
+        state,
+        full_address: `${street}, ${area}, ${city}, ${state}, ${pincode}`,
+        lat: latitude,
+        lan: longitude,
+        primary_number: mobile,
       };
 
-      const response = await axios.post(
-        `${ProjectSetting.API_URL}/Website/postBusiness`,
-        payload
+      const response = await fetch(
+        `${ProjectSetting.APP_API_URL}/Billing/addNewBusinessWeb`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
       );
 
-      if (response.data.status === "success") {
+      const data = await response.json();
+
+      if (data.status === "success") {
         setSuccessMessage("Business added successfully!");
         setTimeout(() => router.push("/dashboard"), 2000);
       } else {
-        setErrors((prev) => ({ ...prev, general: response.data.message }));
+        setErrors((prev) => ({ ...prev, general: data.message }));
       }
-    } catch (err) {
-      console.error("Error submitting business:", err);
+    } catch (error) {
+      console.error("Error submitting business:", error);
       setErrors((prev) => ({ ...prev, general: "Something went wrong." }));
     } finally {
       setIsSubmitting(false);
@@ -143,7 +195,7 @@ const PostBusiness = () => {
     setStreet(street || "");
     setPincode(zipCode || "");
     setArea(area || "");
-    setLongitude(latitude || "");
+    setLatitude(latitude || "");
     setLongitude(longitude || "");
 
     try {
@@ -228,6 +280,7 @@ const PostBusiness = () => {
         <SelectBusinessCategoryAndSubCategory
           onSelectionChange={handleSelectionChange}
           planDetails={planDetails}
+          newError={errors}
         />
         <Box mt={4}>
           <BusinessAddressMap onAddressSelected={handleAddressSelected} />
@@ -242,6 +295,16 @@ const PostBusiness = () => {
           onChange={(e) => setStreet(e.target.value)}
           error={!!errors.street}
           helperText={errors.street}
+        />
+        <TextField
+          fullWidth
+          label="Area"
+          variant="outlined"
+          margin="normal"
+          value={area}
+          onChange={(e) => setArea(e.target.value)}
+          error={!!errors.area}
+          helperText={errors.area}
         />
         <TextField
           fullWidth

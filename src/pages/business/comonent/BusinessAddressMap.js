@@ -73,19 +73,19 @@ const BusinessAddressMap = ({ onAddressSelected }) => {
         const updatedAddress = {
           area:
             getComponent(["sublocality", "neighborhood"]) ||
-            getComponent(["administrative_area_level_2"]), // Fallback to district
+            getComponent(["administrative_area_level_2"]),
           city:
             getComponent(["locality"]) ||
-            getComponent(["administrative_area_level_2"]), // Fallback to district
+            getComponent(["administrative_area_level_2"]),
           state: getComponent(["administrative_area_level_1"]),
           zipCode: getComponent(["postal_code"]),
-          street: getComponent(["route"]), // Extract street if available
+          street: getComponent(["route"]),
           latitude,
           longitude,
         };
 
         setAddressDetails(updatedAddress);
-        onAddressSelected(updatedAddress); // Pass back to parent
+        onAddressSelected(updatedAddress);
       } else {
         alert("Unable to fetch address details.");
       }
@@ -123,11 +123,10 @@ const BusinessAddressMap = ({ onAddressSelected }) => {
       },
       (error) => {
         console.error("Error fetching location:", error);
-        setRegion(DEFAULT_LOCATION);
-        setMarker(DEFAULT_LOCATION);
-        fetchAddressDetails(DEFAULT_LOCATION.lat, DEFAULT_LOCATION.lng);
         setIsFetchingLocation(false);
-      }
+        alert("Unable to fetch current location. Using default location.");
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
   };
 
@@ -223,7 +222,29 @@ const BusinessAddressMap = ({ onAddressSelected }) => {
                   center={region}
                   zoom={15}
                   mapContainerStyle={{ width: "100%", height: "100%" }}
-                  options={{ fullscreenControl: false }}
+                  options={{
+                    fullscreenControl: false,
+                    streetViewControl: false,
+                    mapTypeControl: false,
+                    zoomControl: false,
+                    styles: [
+                      {
+                        featureType: "all",
+                        elementType: "labels",
+                        stylers: [{ visibility: "on" }],
+                      },
+                      {
+                        featureType: "poi",
+                        elementType: "all",
+                        stylers: [{ visibility: "on" }],
+                      },
+                      {
+                        featureType: "transit",
+                        elementType: "all",
+                        stylers: [{ visibility: "on" }],
+                      },
+                    ],
+                  }}
                 >
                   <Marker
                     position={marker}

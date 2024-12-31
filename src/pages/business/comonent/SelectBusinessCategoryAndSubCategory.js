@@ -7,12 +7,19 @@ import { ProjectSetting } from "../../../config/ProjectSetting";
 const SelectBusinessCategoryAndSubCategory = ({
   onSelectionChange,
   planDetails,
+  newError,
 }) => {
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedSubCategories, setSelectedSubCategories] = useState([]);
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    if (newError) {
+      setErrors(newError);
+    }
+  }, [newError]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -36,41 +43,31 @@ const SelectBusinessCategoryAndSubCategory = ({
   }, []);
 
   const handleCategoryChange = (selected) => {
-    if (planDetails.plan_id == 1) {
-      if (selected.length > 1) {
-        setErrors({
-          categories:
-            "You can select up to 1 categories only in Plan " +
-            planDetails.plan_name,
-        });
-        return;
-      }
+    let validationError = "";
+
+    // Validation based on plan ID
+    if (planDetails.plan_id == 1 && selected.length > 1) {
+      validationError = `You can select up to 1 category only in Plan ${planDetails.plan_name}`;
+    } else if (planDetails.plan_id == 2 && selected.length > 3) {
+      validationError = `You can select up to 3 categories only in Plan ${planDetails.plan_name}`;
+    } else if (planDetails.plan_id == 3 && selected.length > 5) {
+      validationError = `You can select up to 5 categories only in Plan ${planDetails.plan_name}`;
     }
-    if (planDetails.plan_id == 3) {
-      if (selected.length > 3) {
-        setErrors({
-          categories:
-            "You can select up to 3 categories only in Plan " +
-            planDetails.plan_name,
-        });
-        return;
-      }
+
+    // If there's a validation error, set the error state and return
+    if (validationError) {
+      setErrors((prev) => ({ ...prev, categories: validationError }));
+      return;
     }
-    if (planDetails.plan_id == 5) {
-      if (selected.length > 5) {
-        setErrors({
-          categories:
-            "You can select up to 5 categories only in Plan " +
-            planDetails.plan_name,
-        });
-        return;
-      }
-    }
+
+    // Update selected categories and clear any existing category errors
     setSelectedCategories(selected);
     setErrors((prev) => ({ ...prev, categories: null }));
 
+    // Extract category IDs
     const categoryIds = selected.map((item) => item.value);
 
+    // Fetch subcategories if any categories are selected
     if (categoryIds.length > 0) {
       axios
         .post(`${ProjectSetting.APP_API_URL}/Billing/getSubCategories`, {
@@ -95,7 +92,7 @@ const SelectBusinessCategoryAndSubCategory = ({
       setSubCategories([]);
     }
 
-    // Notify parent about changes
+    // Notify parent about the changes
     onSelectionChange(selected, selectedSubCategories);
   };
 
@@ -143,6 +140,11 @@ const SelectBusinessCategoryAndSubCategory = ({
           menu: (base) => ({ ...base, zIndex: 10 }),
         }}
       />
+      {errors.subCategories && (
+        <Typography variant="body2" color="error" sx={{ marginTop: 1 }}>
+          {errors.subCategories}
+        </Typography>
+      )}
     </div>
   );
 };
