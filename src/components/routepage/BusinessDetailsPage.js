@@ -38,20 +38,20 @@ export default function BusinessDetailsPage({
       .toLowerCase() // Convert the entire string to lowercase
       .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize the first letter of each word
 
-  const title = `${toTitleCase(categoryslug)} in ${toTitleCase(
-    city
-  )}, ${toTitleCase(state)}`;
+  const title = `${toTitleCase(titles)} in ${toTitleCase(city)}, ${toTitleCase(
+    state
+  )}`;
 
   useEffect(() => {
-    if (categoryid && city && state && categoryslug) {
+    if (listing_id && city && state && titles) {
       fetchBusinesses();
     }
-  }, [categoryid, city, state, categoryslug]);
+  }, [listing_id, city, state, titles]);
 
   const fetchBusinesses = async () => {
     try {
       const response = await fetch(
-        `${ProjectSetting.API_URL}/Website/getBusinesses?categoryid=${categoryid}&city=${city}&state=${state}`
+        `${ProjectSetting.API_URL}/Website/getBusinessesDetails?listing_id=${listing_id}`
       );
 
       const data = await response.json();
@@ -157,7 +157,7 @@ export default function BusinessDetailsPage({
           {/* Businesses Column (8 Grid) */}
           <Grid item xs={12} md={8}>
             <BusinessListCardRactangular
-              categoryName={toTitleCase(categoryslug)}
+              categoryName={toTitleCase(titles)}
               businesses={businesses}
               city={city}
               state={state}

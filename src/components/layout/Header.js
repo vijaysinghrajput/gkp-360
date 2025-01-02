@@ -22,6 +22,7 @@ import ContactMailIcon from "@mui/icons-material/ContactMail";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CloseIcon from "@mui/icons-material/Close";
 import LogoutIcon from "@mui/icons-material/Logout";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 import { useAuth } from "../../context/AuthContext"; // Import AuthContext
 import { useRouter } from "next/router";
 
@@ -36,6 +37,7 @@ export default function Header() {
 
   const handleLogout = () => {
     logout(); // Call logout function from AuthContext
+    router.push("/login");
   };
 
   const menuItems = [
@@ -93,11 +95,27 @@ export default function Header() {
             <ListItemText primary={item.label} />
           </ListItem>
         ))}
+        {user && (
+          <ListItem
+            button
+            component="a"
+            href="/dashboard"
+            sx={{
+              transition: "0.3s",
+              "&:hover": {
+                backgroundColor: "rgba(255, 255, 255, 0.1)",
+              },
+            }}
+          >
+            <ListItemIcon sx={{ color: "#fff" }}>
+              <DashboardIcon />
+            </ListItemIcon>
+            <ListItemText primary="Dashboard" />
+          </ListItem>
+        )}
         <ListItem
           button
-          onClick={
-            user ? handleLogout : () => (window.location.href = "/login")
-          }
+          onClick={user ? handleLogout : () => router.push("/login")}
           sx={{
             transition: "0.3s",
             "&:hover": {
@@ -128,7 +146,7 @@ export default function Header() {
             cursor: "pointer",
             textShadow: "1px 1px 3px rgba(0,0,0,0.3)",
           }}
-          onClick={() => (window.location.href = "/")}
+          onClick={() => router.push("/")}
         >
           GKP 360
         </Typography>
@@ -149,6 +167,21 @@ export default function Header() {
               {item.label}
             </Button>
           ))}
+          {user && (
+            <Button
+              color="inherit"
+              href="/dashboard"
+              sx={{
+                marginX: 1,
+                fontWeight: "bold",
+                "&:hover": {
+                  color: "#4CAF50",
+                },
+              }}
+            >
+              Dashboard
+            </Button>
+          )}
           <Button
             color="inherit"
             onClick={user ? handleLogout : () => router.push("/login")}

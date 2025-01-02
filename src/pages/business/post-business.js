@@ -131,35 +131,46 @@ const PostBusiness = () => {
     const listingID = generateUniqueID();
 
     // Generate SEO-friendly URL
-    const listingUrl = `${businessName} ${area} ${city} ${state} ${listingID}`
+    const listingUrl = `${businessName} ${area} ${city} ${state} ${user.id}`
       .toLowerCase()
       .replace(/[^a-z0-9\s-]/g, "")
       .replace(/\s+/g, "-")
       .trim();
 
+    // Create the payload
+    const payload = {
+      planId: planId,
+      listing_id: listingID,
+      user_id: user.id,
+      listing_type: "Business",
+      service_type: "Products and Services",
+      listing_url: listingUrl,
+      title: businessName,
+      category: selectedCategories.map((cat) => cat.value), // Send as array of values
+      subCategory: selectedSubCategories.map((subCat) => subCat.value), // Send as array of values
+      street,
+      area,
+      city,
+      zip: pincode,
+      state,
+      full_address: `${street}, ${area}, ${city}, ${state}, ${pincode}`,
+      lat: latitude,
+      lan: longitude,
+      primary_number: mobile,
+    };
+
+    // console.log(
+    //   "API URL:",
+    //   `${ProjectSetting.APP_API_URL}/Billing/addNewBusinessWeb`
+    // );
+    // console.log("Payload:", JSON.stringify(payload, null, 2));
+
     try {
-      const payload = {
-        planId: planId,
-        listing_id: listingID,
-        user_id: user.id,
-        listing_type: "Business",
-        service_type: "Products and Services",
-        listing_url: listingUrl,
-        title: businessName,
-        category: selectedCategories.map((cat) => ({ value: cat.value })),
-        subCategory: selectedSubCategories.map((subCat) => ({
-          value: subCat.value,
-        })),
-        street,
-        area,
-        city,
-        zip: pincode,
-        state,
-        full_address: `${street}, ${area}, ${city}, ${state}, ${pincode}`,
-        lat: latitude,
-        lan: longitude,
-        primary_number: mobile,
-      };
+      //   console.log(
+      //     "API URL:",
+      //     `${ProjectSetting.APP_API_URL}/Billing/addNewBusinessWeb`
+      //   );
+      //   console.log("Payload:", JSON.stringify(payload, null, 2));
 
       const response = await fetch(
         `${ProjectSetting.APP_API_URL}/Billing/addNewBusinessWeb`,
@@ -172,7 +183,12 @@ const PostBusiness = () => {
         }
       );
 
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
       const data = await response.json();
+      console.log("Response data:", data);
 
       if (data.status === "success") {
         setSuccessMessage("Business added successfully!");
@@ -182,7 +198,10 @@ const PostBusiness = () => {
       }
     } catch (error) {
       console.error("Error submitting business:", error);
-      setErrors((prev) => ({ ...prev, general: "Something went wrong." }));
+      setErrors((prev) => ({
+        ...prev,
+        general: `Something went wrong: ${error.message}. Please try again later.`,
+      }));
     } finally {
       setIsSubmitting(false);
     }
@@ -302,6 +321,7 @@ const PostBusiness = () => {
           variant="outlined"
           margin="normal"
           value={area}
+          disabled
           onChange={(e) => setArea(e.target.value)}
           error={!!errors.area}
           helperText={errors.area}

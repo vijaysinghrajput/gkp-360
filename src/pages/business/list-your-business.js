@@ -35,7 +35,7 @@ const ListYourBusiness = () => {
     axios
       .get(`${ProjectSetting.API_URL}/Website/getPlans`)
       .then((response) => {
-        if (response.data.status === "success") {
+        if (response.data.status == "success") {
           setPlans(response.data.data);
         } else {
           setError(response.data.message);
@@ -146,7 +146,7 @@ const ListYourBusiness = () => {
           <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
             <Card
               sx={{
-                border: `2px solid ${index % 2 === 0 ? "#4CAF50" : "#FFC107"}`,
+                border: `2px solid ${index % 2 == 0 ? "#4CAF50" : "#FFC107"}`,
                 boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
                 borderRadius: "16px",
                 display: "flex",
@@ -215,8 +215,8 @@ const ListYourBusiness = () => {
                               .replace(/\b\w/g, (c) => c.toUpperCase())}
                           </Typography>
                         </Box>
-                        {value === 1 || value === 0 ? (
-                          value === 1 ? (
+                        {value == 1 || value == 0 ? (
+                          value == 1 ? (
                             <CheckIcon color="success" />
                           ) : (
                             <CancelIcon color="error" />
