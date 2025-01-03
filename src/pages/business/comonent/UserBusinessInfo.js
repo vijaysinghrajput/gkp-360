@@ -8,6 +8,10 @@ import {
   TextField,
   Button,
   IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import {
   Phone as PhoneIcon,
@@ -20,24 +24,24 @@ import {
   Business as BusinessIcon,
   Room as RoomIcon,
   Edit as EditIcon,
-  Save as SaveIcon,
-  Cancel as CancelIcon,
 } from "@mui/icons-material";
 
+import UpdateBusinessInfo from "./props/UpdateBusinessInfo";
+
 function UserBusinessInfo({ business, onSave }) {
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(null);
   const [editableBusiness, setEditableBusiness] = useState({ ...business });
 
-  const handleEdit = () => setIsEditing(true);
+  const handleEdit = (section) => setIsEditing(section);
 
   const handleCancel = () => {
-    setIsEditing(false);
+    setIsEditing(null);
     setEditableBusiness({ ...business });
   };
 
   const handleSave = () => {
-    setIsEditing(false);
-    onSave(editableBusiness); // Call the save function with updated data
+    setIsEditing(null);
+    onSave(editableBusiness);
   };
 
   const handleChange = (field, value) => {
@@ -65,40 +69,18 @@ function UserBusinessInfo({ business, onSave }) {
           <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: 2 }}>
             Basic Information
           </Typography>
-          {!isEditing ? (
-            <IconButton onClick={handleEdit}>
-              <EditIcon />
-            </IconButton>
-          ) : (
-            <Box>
-              <IconButton onClick={handleSave}>
-                <SaveIcon />
-              </IconButton>
-              <IconButton onClick={handleCancel}>
-                <CancelIcon />
-              </IconButton>
-            </Box>
-          )}
+          <IconButton onClick={() => handleEdit("basic")}>
+            {" "}
+            <EditIcon />{" "}
+          </IconButton>
         </Box>
-
         <Grid container spacing={3}>
-          {/* Title */}
           <Grid item xs={12} sm={6}>
             <Typography variant="h6">
               <BusinessIcon sx={{ marginRight: 1 }} /> Title
             </Typography>
-            {isEditing ? (
-              <TextField
-                fullWidth
-                value={editableBusiness.title}
-                onChange={(e) => handleChange("title", e.target.value)}
-              />
-            ) : (
-              <Typography>{business.title || "N/A"}</Typography>
-            )}
+            <Typography>{business.title || "N/A"}</Typography>
           </Grid>
-
-          {/* Logo */}
           <Grid item xs={12} sm={6}>
             <Typography variant="h6">Logo</Typography>
             <Avatar
@@ -110,7 +92,6 @@ function UserBusinessInfo({ business, onSave }) {
         </Grid>
       </Paper>
 
-      {/* Address Block */}
       <Paper
         elevation={3}
         sx={{
@@ -119,28 +100,25 @@ function UserBusinessInfo({ business, onSave }) {
           marginBottom: 4,
         }}
       >
-        <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: 2 }}>
-          Address
-        </Typography>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: 2 }}>
+            Address
+          </Typography>
+          <IconButton onClick={() => handleEdit("address")}>
+            {" "}
+            <EditIcon />{" "}
+          </IconButton>
+        </Box>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Typography variant="h6">
               <RoomIcon sx={{ marginRight: 1 }} /> Full Address
             </Typography>
-            {isEditing ? (
-              <TextField
-                fullWidth
-                value={editableBusiness.full_address}
-                onChange={(e) => handleChange("full_address", e.target.value)}
-              />
-            ) : (
-              <Typography>{business.full_address || "N/A"}</Typography>
-            )}
+            <Typography>{business.full_address || "N/A"}</Typography>
           </Grid>
         </Grid>
       </Paper>
 
-      {/* Contact Details */}
       <Paper
         elevation={3}
         sx={{
@@ -149,40 +127,27 @@ function UserBusinessInfo({ business, onSave }) {
           marginBottom: 4,
         }}
       >
-        <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: 2 }}>
-          Contact Details
-        </Typography>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: 2 }}>
+            Contact Details
+          </Typography>
+          <IconButton onClick={() => handleEdit("contact")}>
+            {" "}
+            <EditIcon />{" "}
+          </IconButton>
+        </Box>
         <Grid container spacing={3}>
-          {/* Phone */}
           <Grid item xs={12} sm={6}>
             <Typography variant="h6">
               <PhoneIcon sx={{ marginRight: 1 }} /> Primary Number
             </Typography>
-            {isEditing ? (
-              <TextField
-                fullWidth
-                value={editableBusiness.primary_number}
-                onChange={(e) => handleChange("primary_number", e.target.value)}
-              />
-            ) : (
-              <Typography>{business.primary_number || "N/A"}</Typography>
-            )}
+            <Typography>{business.primary_number || "N/A"}</Typography>
           </Grid>
-
-          {/* Email */}
           <Grid item xs={12} sm={6}>
             <Typography variant="h6">
               <EmailIcon sx={{ marginRight: 1 }} /> Email
             </Typography>
-            {isEditing ? (
-              <TextField
-                fullWidth
-                value={editableBusiness.email}
-                onChange={(e) => handleChange("email", e.target.value)}
-              />
-            ) : (
-              <Typography>{business.email || "N/A"}</Typography>
-            )}
+            <Typography>{business.email || "N/A"}</Typography>
           </Grid>
         </Grid>
       </Paper>
@@ -195,43 +160,90 @@ function UserBusinessInfo({ business, onSave }) {
           borderRadius: 4,
         }}
       >
-        <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: 2 }}>
-          Social Media
-        </Typography>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: 2 }}>
+            Social Media
+          </Typography>
+          <IconButton onClick={() => handleEdit("social")}>
+            {" "}
+            <EditIcon />{" "}
+          </IconButton>
+        </Box>
         <Grid container spacing={3}>
-          {/* Facebook */}
           <Grid item xs={12} sm={6}>
             <Typography variant="h6">
               <FacebookIcon sx={{ marginRight: 1 }} /> Facebook
             </Typography>
-            {isEditing ? (
-              <TextField
-                fullWidth
-                value={editableBusiness.facebook}
-                onChange={(e) => handleChange("facebook", e.target.value)}
-              />
-            ) : (
-              <Typography>{business.facebook || "N/A"}</Typography>
-            )}
+            <Typography>{business.facebook || "N/A"}</Typography>
           </Grid>
-
-          {/* Twitter */}
           <Grid item xs={12} sm={6}>
             <Typography variant="h6">
               <TwitterIcon sx={{ marginRight: 1 }} /> Twitter
             </Typography>
-            {isEditing ? (
-              <TextField
-                fullWidth
-                value={editableBusiness.twitter}
-                onChange={(e) => handleChange("twitter", e.target.value)}
-              />
-            ) : (
-              <Typography>{business.twitter || "N/A"}</Typography>
-            )}
+            <Typography>{business.twitter || "N/A"}</Typography>
           </Grid>
         </Grid>
       </Paper>
+
+      {/* Edit Modal */}
+      <Dialog open={!!isEditing} onClose={handleCancel}>
+        <DialogTitle>Edit {isEditing} Information</DialogTitle>
+        <DialogContent>
+          {isEditing === "basic" && (
+            <UpdateBusinessInfo
+              initialData={editableBusiness}
+              onSave={(updatedData) => {}}
+              onCancel={handleCancel}
+            />
+          )}
+
+          {isEditing === "address" && (
+            <TextField
+              fullWidth
+              label="Full Address"
+              value={editableBusiness.full_address}
+              onChange={(e) => handleChange("full_address", e.target.value)}
+              sx={{ marginBottom: 2 }}
+            />
+          )}
+          {isEditing === "contact" && (
+            <>
+              <TextField
+                fullWidth
+                label="Primary Number"
+                value={editableBusiness.primary_number}
+                onChange={(e) => handleChange("primary_number", e.target.value)}
+                sx={{ marginBottom: 2 }}
+              />
+              <TextField
+                fullWidth
+                label="Email"
+                value={editableBusiness.email}
+                onChange={(e) => handleChange("email", e.target.value)}
+                sx={{ marginBottom: 2 }}
+              />
+            </>
+          )}
+          {isEditing === "social" && (
+            <>
+              <TextField
+                fullWidth
+                label="Facebook"
+                value={editableBusiness.facebook}
+                onChange={(e) => handleChange("facebook", e.target.value)}
+                sx={{ marginBottom: 2 }}
+              />
+              <TextField
+                fullWidth
+                label="Twitter"
+                value={editableBusiness.twitter}
+                onChange={(e) => handleChange("twitter", e.target.value)}
+                sx={{ marginBottom: 2 }}
+              />
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 }
