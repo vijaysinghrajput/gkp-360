@@ -321,7 +321,6 @@ const PostBusiness = () => {
           variant="outlined"
           margin="normal"
           value={area}
-          disabled
           onChange={(e) => setArea(e.target.value)}
           error={!!errors.area}
           helperText={errors.area}

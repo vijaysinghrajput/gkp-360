@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import {
   Box,
   Typography,
@@ -9,18 +8,16 @@ import {
   Alert,
 } from "@mui/material";
 import BusinessSearchBox from "../../../components/ui/BusinessSearchBox";
+import BusinessMainCategoryList from "../../../components/ui/BusinessMainCategoryList";
+import BusinessLists from "../../../components/ui/BusinessLists";
 
 import { ProjectSetting } from "../../../config/ProjectSetting";
 
-export default function BusinessList() {
+export default function BusinessCategory() {
   const [businesses, setBusinesses] = useState([]);
+  const [category, setCategory] = useState([]);
   const [filteredBusinesses, setFilteredBusinesses] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [location, setLocation] = useState({ city: "", state: "" });
-  const [selectedCategory, setSelectedCatgeory] = useState({
-    id: null,
-    category_name_slug: "",
-  });
   const [searchTerm, setSearchTerm] = useState("");
   const [error, setError] = useState("");
 
@@ -32,10 +29,12 @@ export default function BusinessList() {
       const data = await response.json();
       if (data.status === "success") {
         setBusinesses(data.data);
+        setCategory(data.category);
         setFilteredBusinesses(data.data);
       }
     } catch (error) {
       console.error("Error fetching businesses:", error);
+      setError("Failed to fetch businesses. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -52,6 +51,8 @@ export default function BusinessList() {
     );
     setFilteredBusinesses(filtered);
   };
+
+  const handleCategoryClick = (category) => {};
 
   if (loading) {
     return (
@@ -73,6 +74,7 @@ export default function BusinessList() {
         minHeight: "100vh",
       }}
     >
+      {/* Search Box */}
       <Box
         sx={{
           backgroundColor: "#fff",
@@ -81,92 +83,53 @@ export default function BusinessList() {
           boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
         }}
       >
-        <BusinessSearchBox />
+        <BusinessSearchBox
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onSearch={handleSearch}
+        />
       </Box>
 
-      <Typography
-        variant="h6"
-        align="center"
-        color="primary.main"
-        sx={{ marginY: 3 }}
-      >
-        {location.city && location.state
-          ? `Showing results for ${location.city.replace(
-              /-/g,
-              " "
-            )}, ${location.state.replace(/-/g, " ")}`
-          : "Set your location to see results"}
-      </Typography>
-
-      <Typography
-        variant="h6"
-        align="center"
-        color="primary.main"
-        sx={{ marginY: 3 }}
-      >
-        {selectedCategory?.category_name_slug}
-      </Typography>
-
-      <Grid container spacing={3} sx={{ padding: "20px" }}>
-        {filteredBusinesses.map((business, index) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-            <Link
-              href={`/business/${location.city}/${location.state}/${business.listing_id}`}
-              passHref
+      {/* Full Width Grid Layout */}
+      <Grid container spacing={2} sx={{ padding: 2 }}>
+        {/* Category List */}
+        <Grid item xs={12} md={4}>
+          <Box sx={{ backgroundColor: "#fff", padding: 2, borderRadius: 2 }}>
+            <Typography
+              variant="h6"
+              sx={{ marginBottom: 2, fontWeight: "bold" }}
             >
-              <Box
-                sx={{
-                  padding: 2,
-                  border: "1px solid",
-                  borderColor: "primary.main",
-                  borderRadius: 2,
-                  textAlign: "center",
-                  backgroundColor: "#fff",
-                  transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                  cursor: "pointer",
-                  "&:hover": {
-                    transform: "scale(1.05)",
-                    boxShadow: 3,
-                  },
-                }}
-              >
-                <Typography
-                  variant="subtitle1"
-                  fontWeight="bold"
-                  color="text.primary"
-                >
-                  {business.title}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ mt: 1 }}
-                >
-                  {business.full_address}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ mt: 1 }}
-                >
-                  Phone: {business.primary_number}
-                </Typography>
-              </Box>
-            </Link>
-          </Grid>
-        ))}
-        {filteredBusinesses.length === 0 && (
-          <Typography
-            variant="body1"
-            align="center"
-            color="text.secondary"
-            sx={{ width: "100%", marginTop: 3 }}
+              Categories
+            </Typography>
+            <BusinessMainCategoryList
+              category={category}
+              onCategoryClick={handleCategoryClick}
+            />
+          </Box>
+        </Grid>
+
+        {/* Business List */}
+        <Grid item xs={12} md={8}>
+          <Box
+            sx={{
+              backgroundColor: "#fff",
+              padding: 2,
+              borderRadius: 2,
+              boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+            }}
           >
-            No businesses found.
-          </Typography>
-        )}
+            <Typography
+              variant="h6"
+              sx={{ marginBottom: 2, fontWeight: "bold" }}
+            >
+              Businesses
+            </Typography>
+            <BusinessLists businesses={businesses} />
+          </Box>
+        </Grid>
       </Grid>
 
+      {/* Error Snackbar */}
       {error && (
         <Snackbar
           open={true}

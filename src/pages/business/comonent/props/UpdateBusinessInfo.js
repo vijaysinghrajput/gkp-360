@@ -6,6 +6,7 @@ import {
   Typography,
   Avatar,
   CircularProgress,
+  Modal,
 } from "@mui/material";
 import { PhotoCamera } from "@mui/icons-material";
 import axios from "axios"; // Ensure axios is imported
@@ -17,6 +18,9 @@ function UpdateBusinessInfo({ initialData, onSave, onCancel }) {
   const [logoPreview, setLogoPreview] = useState(initialData.logo || "");
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useAuth(); // Use AuthContext
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [modalTitle, setModalTitle] = useState("");
 
   const handleChange = (field, value) => {
     setData((prev) => ({ ...prev, [field]: value }));
@@ -46,7 +50,9 @@ function UpdateBusinessInfo({ initialData, onSave, onCancel }) {
 
   const handleSave = async () => {
     if (!data.title.trim()) {
-      window.alert("Error: Business name is required.");
+      setModalTitle("Error");
+      setModalMessage("Business name is required.");
+      setModalOpen(true);
       return;
     }
 
@@ -78,14 +84,18 @@ function UpdateBusinessInfo({ initialData, onSave, onCancel }) {
       if (response.data.status === "success") {
         setIsLoading(false);
         onSave();
-        window.alert("Success: Business information updated successfully!");
+        setModalTitle("Success");
+        setModalMessage("Business information updated successfully!");
+        setModalOpen(true);
       } else {
         throw new Error(response.data.message || "Update failed.");
       }
     } catch (error) {
       setIsLoading(false);
       console.error("Error updating business info:", error);
-      window.alert("Error: Failed to update business information.");
+      setModalTitle("Error");
+      setModalMessage("Failed to update business information.");
+      setModalOpen(true);
     }
   };
 
@@ -150,6 +160,40 @@ function UpdateBusinessInfo({ initialData, onSave, onCancel }) {
           {isLoading ? <CircularProgress size={24} color="inherit" /> : "Save"}
         </Button>
       </Box>
+
+      <Modal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 400,
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+          }}
+        >
+          <Typography id="modal-title" variant="h6" component="h2">
+            {modalTitle}
+          </Typography>
+          <Typography id="modal-description" sx={{ mt: 2 }}>
+            {modalMessage}
+          </Typography>
+          <Button
+            onClick={() => setModalOpen(false)}
+            color="primary"
+            sx={{ mt: 2 }}
+          >
+            Close
+          </Button>
+        </Box>
+      </Modal>
     </Box>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -12,6 +12,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  CircularProgress,
 } from "@mui/material";
 import {
   Phone as PhoneIcon,
@@ -27,10 +28,19 @@ import {
 } from "@mui/icons-material";
 
 import UpdateBusinessInfo from "./props/UpdateBusinessInfo";
+import UpdateBusinessAddress from "./props/UpdateBusinessAddress";
+import UpdateBusinessContact from "./props/UpdateBusinessContact";
+import UpdateBusinessSocialMedia from "./props/UpdateBusinessSocialMedia";
 
-function UserBusinessInfo({ business, onSave }) {
+function UserBusinessInfo({ business, plan_id, onSave }) {
   const [isEditing, setIsEditing] = useState(null);
-  const [editableBusiness, setEditableBusiness] = useState({ ...business });
+  const [editableBusiness, setEditableBusiness] = useState(null);
+
+  useEffect(() => {
+    if (business) {
+      setEditableBusiness({ ...business });
+    }
+  }, [business]);
 
   const handleEdit = (section) => setIsEditing(section);
 
@@ -41,12 +51,27 @@ function UserBusinessInfo({ business, onSave }) {
 
   const handleSave = () => {
     setIsEditing(null);
-    onSave(editableBusiness);
+    onSave();
   };
 
   const handleChange = (field, value) => {
     setEditableBusiness((prev) => ({ ...prev, [field]: value }));
   };
+
+  if (!editableBusiness) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ padding: { xs: 2, sm: 4 } }}>
@@ -67,7 +92,7 @@ function UserBusinessInfo({ business, onSave }) {
       >
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: 2 }}>
-            Basic Information
+            <BusinessIcon sx={{ marginRight: 1 }} /> Basic Information
           </Typography>
           <IconButton onClick={() => handleEdit("basic")}>
             {" "}
@@ -76,10 +101,8 @@ function UserBusinessInfo({ business, onSave }) {
         </Box>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6}>
-            <Typography variant="h6">
-              <BusinessIcon sx={{ marginRight: 1 }} /> Title
-            </Typography>
-            <Typography>{business.title || "N/A"}</Typography>
+            <Typography variant="h6">Title</Typography>
+            <Typography>{editableBusiness.title || "N/A"}</Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
             <Typography variant="h6">Logo</Typography>
@@ -89,6 +112,10 @@ function UserBusinessInfo({ business, onSave }) {
               sx={{ width: 80, height: 80, marginBottom: 1 }}
             />
           </Grid>
+          <Grid item xs={12}>
+            <Typography variant="h6">Description</Typography>
+            <Typography>{editableBusiness.about || "N/A"}</Typography>
+          </Grid>
         </Grid>
       </Paper>
 
@@ -102,7 +129,7 @@ function UserBusinessInfo({ business, onSave }) {
       >
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: 2 }}>
-            Address
+            <RoomIcon sx={{ marginRight: 1 }} /> Address
           </Typography>
           <IconButton onClick={() => handleEdit("address")}>
             {" "}
@@ -111,10 +138,8 @@ function UserBusinessInfo({ business, onSave }) {
         </Box>
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <Typography variant="h6">
-              <RoomIcon sx={{ marginRight: 1 }} /> Full Address
-            </Typography>
-            <Typography>{business.full_address || "N/A"}</Typography>
+            <Typography variant="h6">Full Address</Typography>
+            <Typography>{editableBusiness.full_address || "N/A"}</Typography>
           </Grid>
         </Grid>
       </Paper>
@@ -129,7 +154,7 @@ function UserBusinessInfo({ business, onSave }) {
       >
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: 2 }}>
-            Contact Details
+            <PhoneIcon sx={{ marginRight: 1 }} /> Contact Details
           </Typography>
           <IconButton onClick={() => handleEdit("contact")}>
             {" "}
@@ -138,21 +163,24 @@ function UserBusinessInfo({ business, onSave }) {
         </Box>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6}>
-            <Typography variant="h6">
-              <PhoneIcon sx={{ marginRight: 1 }} /> Primary Number
-            </Typography>
-            <Typography>{business.primary_number || "N/A"}</Typography>
+            <Typography variant="h6">Primary Number</Typography>
+            <Typography>{editableBusiness.primary_number || "N/A"}</Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <Typography variant="h6">
-              <EmailIcon sx={{ marginRight: 1 }} /> Email
-            </Typography>
-            <Typography>{business.email || "N/A"}</Typography>
+            <Typography variant="h6">Other Number</Typography>
+            <Typography>{editableBusiness.other_number || "N/A"}</Typography>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Typography variant="h6">Whatsapp Number</Typography>
+            <Typography>{editableBusiness.whatsapp_number || "N/A"}</Typography>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Typography variant="h6">Email</Typography>
+            <Typography>{editableBusiness.email || "N/A"}</Typography>
           </Grid>
         </Grid>
       </Paper>
 
-      {/* Social Media */}
       <Paper
         elevation={3}
         sx={{
@@ -162,7 +190,7 @@ function UserBusinessInfo({ business, onSave }) {
       >
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: 2 }}>
-            Social Media
+            <LanguageIcon sx={{ marginRight: 1 }} /> Social Media
           </Typography>
           <IconButton onClick={() => handleEdit("social")}>
             {" "}
@@ -171,76 +199,63 @@ function UserBusinessInfo({ business, onSave }) {
         </Box>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6}>
-            <Typography variant="h6">
-              <FacebookIcon sx={{ marginRight: 1 }} /> Facebook
-            </Typography>
-            <Typography>{business.facebook || "N/A"}</Typography>
+            <Typography variant="h6">Website</Typography>
+            <Typography>{editableBusiness.website || "N/A"}</Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <Typography variant="h6">
-              <TwitterIcon sx={{ marginRight: 1 }} /> Twitter
-            </Typography>
-            <Typography>{business.twitter || "N/A"}</Typography>
+            <Typography variant="h6">Instagram</Typography>
+            <Typography>{editableBusiness.instagram || "N/A"}</Typography>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Typography variant="h6">Facebook</Typography>
+            <Typography>{editableBusiness.facebook || "N/A"}</Typography>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Typography variant="h6">Twitter</Typography>
+            <Typography>{editableBusiness.twitter || "N/A"}</Typography>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Typography variant="h6">Youtube</Typography>
+            <Typography>{editableBusiness.youtube || "N/A"}</Typography>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Typography variant="h6">Google My Business</Typography>
+            <Typography>{editableBusiness.gmb || "N/A"}</Typography>
           </Grid>
         </Grid>
       </Paper>
 
-      {/* Edit Modal */}
       <Dialog open={!!isEditing} onClose={handleCancel}>
         <DialogTitle>Edit {isEditing} Information</DialogTitle>
         <DialogContent>
           {isEditing === "basic" && (
             <UpdateBusinessInfo
               initialData={editableBusiness}
-              onSave={(updatedData) => {}}
+              onSave={() => handleSave()}
               onCancel={handleCancel}
             />
           )}
 
           {isEditing === "address" && (
-            <TextField
-              fullWidth
-              label="Full Address"
-              value={editableBusiness.full_address}
-              onChange={(e) => handleChange("full_address", e.target.value)}
-              sx={{ marginBottom: 2 }}
+            <UpdateBusinessAddress
+              initialData={editableBusiness}
+              onSave={() => handleSave()}
+              onCancel={handleCancel}
             />
           )}
           {isEditing === "contact" && (
-            <>
-              <TextField
-                fullWidth
-                label="Primary Number"
-                value={editableBusiness.primary_number}
-                onChange={(e) => handleChange("primary_number", e.target.value)}
-                sx={{ marginBottom: 2 }}
-              />
-              <TextField
-                fullWidth
-                label="Email"
-                value={editableBusiness.email}
-                onChange={(e) => handleChange("email", e.target.value)}
-                sx={{ marginBottom: 2 }}
-              />
-            </>
+            <UpdateBusinessContact
+              initialData={editableBusiness}
+              onSave={() => handleSave()}
+              onCancel={handleCancel}
+            />
           )}
           {isEditing === "social" && (
-            <>
-              <TextField
-                fullWidth
-                label="Facebook"
-                value={editableBusiness.facebook}
-                onChange={(e) => handleChange("facebook", e.target.value)}
-                sx={{ marginBottom: 2 }}
-              />
-              <TextField
-                fullWidth
-                label="Twitter"
-                value={editableBusiness.twitter}
-                onChange={(e) => handleChange("twitter", e.target.value)}
-                sx={{ marginBottom: 2 }}
-              />
-            </>
+            <UpdateBusinessSocialMedia
+              initialData={editableBusiness}
+              onSave={() => handleSave()}
+              onCancel={handleCancel}
+            />
           )}
         </DialogContent>
       </Dialog>

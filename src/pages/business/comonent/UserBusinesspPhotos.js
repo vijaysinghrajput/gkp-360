@@ -83,35 +83,7 @@ function UserBusinessPhotos({ listing_id, plan_id }) {
         Business Photos
       </Typography>
 
-      <Box
-        sx={{
-          textAlign: "center",
-          marginTop: 4,
-          color: "text.secondary",
-        }}
-      >
-        <Typography variant="h6" sx={{ marginBottom: 2 }}>
-          {error}
-        </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => setModalOpen(true)}
-          sx={{
-            padding: "10px 20px",
-            fontSize: "16px",
-            textTransform: "none",
-            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.2)",
-            "&:hover": {
-              backgroundColor: "#388e3c",
-            },
-          }}
-        >
-          Add New Photo
-        </Button>
-      </Box>
-
-      {error && photos.length === 0 && (
+      {error && photos.length === 0 ? (
         <Box
           sx={{
             textAlign: "center",
@@ -139,10 +111,35 @@ function UserBusinessPhotos({ listing_id, plan_id }) {
             Add New Photo
           </Button>
         </Box>
-      )}
-
-      {photos.length > 0 && (
-        <PhotoGallery photos={photos} onDelete={() => fetchPhotos()} />
+      ) : (
+        <>
+          {photos.length > 0 && (
+            <PhotoGallery photos={photos} onDelete={() => fetchPhotos()} />
+          )}
+          <Box
+            sx={{
+              textAlign: "center",
+              marginTop: 4,
+            }}
+          >
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setModalOpen(true)}
+              sx={{
+                padding: "10px 20px",
+                fontSize: "16px",
+                textTransform: "none",
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.2)",
+                "&:hover": {
+                  backgroundColor: "#388e3c",
+                },
+              }}
+            >
+              Add New Photo
+            </Button>
+          </Box>
+        </>
       )}
 
       <AddPhotoModal

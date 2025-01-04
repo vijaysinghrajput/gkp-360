@@ -93,11 +93,6 @@ function Lists() {
     { label: "Analytics", icon: <TrendingUpIcon />, id: "analytics" },
     { label: "Enquiry", icon: <ContactSupportIcon />, id: "enquiry" },
     { label: "Photos", icon: <PhotoLibraryIcon />, id: "photos" },
-    {
-      label: "Products / Services",
-      icon: <InventoryIcon />,
-      id: "products_services",
-    },
   ];
 
   const toggleSidebar = () => {
@@ -121,7 +116,11 @@ function Lists() {
     switch (selectedMenu) {
       case "business_info":
         return (
-          <UserBusinessInfo business={business} plan_id={businessPlanID} />
+          <UserBusinessInfo
+            business={business}
+            plan_id={businessPlanID}
+            onSave={() => fetchBusinessDetails(listing_id)}
+          />
         );
       case "business_category":
         return <UserBusinessCategoryList listing_id={listing_id} />;
@@ -151,12 +150,6 @@ function Lists() {
             listing_id={listing_id}
             plan_id={businessPlanID}
           />
-        );
-      case "products_services":
-        return (
-          <Typography variant="h4" textAlign="center">
-            Products / Services Section
-          </Typography>
         );
 
       default:
