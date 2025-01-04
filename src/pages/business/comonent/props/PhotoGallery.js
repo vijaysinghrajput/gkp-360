@@ -21,7 +21,7 @@ function PhotoGallery({ photos, onDelete }) {
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
 
-  if (photos.length === 0) {
+  if (photos?.length === 0) {
     return (
       <Typography
         variant="h6"
@@ -78,7 +78,7 @@ function PhotoGallery({ photos, onDelete }) {
   return (
     <>
       <Grid container spacing={3} sx={{ padding: 2 }}>
-        {photos.map((photo) => (
+        {photos?.map((photo) => (
           <Grid item xs={12} sm={6} md={4} lg={3} key={photo.id}>
             <Card
               sx={{

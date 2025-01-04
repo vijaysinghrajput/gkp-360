@@ -10,84 +10,92 @@ import {
 
 function UserPlanInfo({ listing_id, plan }) {
   const planFields = [
-    { label: "Plan Name", value: plan.plan_name, icon: <MonetizationOnIcon /> },
-    { label: "Price", value: `₹${plan.price}`, icon: <MonetizationOnIcon /> },
+    {
+      label: "Plan Name",
+      value: plan?.plan_name,
+      icon: <MonetizationOnIcon />,
+    },
+    { label: "Price", value: `₹${plan?.price}`, icon: <MonetizationOnIcon /> },
     {
       label: "Duration",
-      value: `${plan.duration} months`,
+      value: `${plan?.duration} months`,
       icon: <EventIcon />,
     },
     {
       label: "Listing Position",
-      value: plan.listing_position,
+      value: plan?.listing_position,
       icon: <InfoIcon />,
     },
-    { label: "Banner Ad", value: plan.banner_ad, icon: <CheckCircleIcon /> },
+    { label: "Banner Ad", value: plan?.banner_ad, icon: <CheckCircleIcon /> },
     {
       label: "Banner Ad Duration",
-      value: `${plan.banner_ad_duration} days`,
+      value: `${plan?.banner_ad_duration} days`,
       icon: <EventIcon />,
     },
     {
       label: "Business Categories",
-      value: plan.business_categories,
+      value: plan?.business_categories,
       icon: <InfoIcon />,
     },
     {
       label: "Premium Business Seal",
-      value: plan.premium_business_seal,
+      value: plan?.premium_business_seal,
       icon: <CheckCircleIcon />,
     },
     {
       label: "Visibility Level",
-      value: plan.visibility_level,
+      value: plan?.visibility_level,
       icon: <InfoIcon />,
     },
-    { label: "Customer Reach", value: plan.customer_reach, icon: <InfoIcon /> },
+    {
+      label: "Customer Reach",
+      value: plan?.customer_reach,
+      icon: <InfoIcon />,
+    },
     {
       label: "Customer Enquiries",
-      value: plan.customer_enquiries,
+      value: plan?.customer_enquiries,
       icon: <InfoIcon />,
     },
     {
       label: "Priority Customer Enquiries",
-      value: plan.priority_customer_enquiries == 0 ? "NO" : "YES",
+      value: plan?.priority_customer_enquiries == 0 ? "NO" : "YES",
       icon: <CheckCircleIcon />,
     },
     {
       label: "WhatsApp Enquiries",
-      value: plan.whatsapp_enquiries,
+      value: plan?.whatsapp_enquiries,
       icon: <InfoIcon />,
     },
     {
       label: "SMS/Call Enquiries",
-      value: plan.sms_call_enquiries,
+      value: plan?.sms_call_enquiries,
       icon: <InfoIcon />,
     },
     {
       label: "Add Products/Services",
-      value: plan.add_products_services,
+      value: plan?.add_products_services,
       icon: <InfoIcon />,
     },
-    { label: "Add Photos", value: plan.add_photos, icon: <InfoIcon /> },
+    { label: "Add Photos", value: plan?.add_photos, icon: <InfoIcon /> },
     {
       label: "Enquiry Delivery System",
-      value: plan.enquiry_delivery_system == 0 ? "NO" : "YES",
+      value: plan?.enquiry_delivery_system == 0 ? "NO" : "YES",
       icon: <InfoIcon />,
     },
     {
       label: "Analytics",
-      value: plan.analytics == 0 ? "NO" : "YES",
+      value: plan?.analytics == 0 ? "NO" : "YES",
       icon: <InfoIcon />,
     },
     {
       label: "Lead Management",
-      value: plan.lead_management == 0 ? "NO" : "YES",
+      value: plan?.lead_management == 0 ? "NO" : "YES",
       icon: <InfoIcon />,
     },
     {
       label: "Premium Support",
-      value: plan.premium_support == 0 ? "NO" : "YES",
+      value: plan?.premium_support == 0 ? "NO" : "YES",
       icon: <CheckCircleIcon />,
     },
   ];

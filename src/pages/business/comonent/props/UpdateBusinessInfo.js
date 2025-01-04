@@ -15,7 +15,7 @@ import { ProjectSetting } from "../../../../config/ProjectSetting";
 
 function UpdateBusinessInfo({ initialData, onSave, onCancel }) {
   const [data, setData] = useState(initialData);
-  const [logoPreview, setLogoPreview] = useState(initialData.logo || "");
+  const [logoPreview, setLogoPreview] = useState(initialData?.logo || "");
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useAuth(); // Use AuthContext
   const [modalOpen, setModalOpen] = useState(false);
@@ -61,13 +61,13 @@ function UpdateBusinessInfo({ initialData, onSave, onCancel }) {
     const listingUrl = generateListingUrl(data.title + " " + data.full_address);
 
     const formData = new FormData();
-    formData.append("listing_id", data.listing_id);
+    formData.append("listing_id", data?.listing_id);
     formData.append("title", data.title);
     formData.append("about", data.about);
     formData.append("listing_url", listingUrl);
 
-    if (typeof data.logo === "object") {
-      formData.append("logo", data.logo);
+    if (typeof data?.logo === "object") {
+      formData.append("logo", data?.logo);
     }
 
     try {
