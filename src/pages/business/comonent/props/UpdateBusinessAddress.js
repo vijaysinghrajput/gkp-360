@@ -20,12 +20,12 @@ function UpdateBusinessAddress({ initialData, onSave, onCancel }) {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [region, setRegion] = useState({
-    lat: parseInt(initialData.lat) || 26.7606,
-    lng: parseInt(initialData.lan) || 83.3732,
+    lat: Number(initialData.lat) || 26.7606,
+    lng: Number(initialData.lan) || 83.3732,
   });
   const [marker, setMarker] = useState({
-    lat: parseInt(initialData.lat) || 26.7606,
-    lng: parseInt(initialData.lan) || 83.3732,
+    lat: Number(initialData.lat) || 26.7606,
+    lng: Number(initialData.lan) || 83.3732,
   });
   const [predictions, setPredictions] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -45,12 +45,12 @@ function UpdateBusinessAddress({ initialData, onSave, onCancel }) {
     if (initialData) {
       setData(initialData);
       setRegion({
-        lat: parseInt(initialData.lat) || 26.7606,
-        lng: parseInt(initialData.lan) || 83.3732,
+        lat: Number(initialData.lat) || 26.7606,
+        lng: Number(initialData.lan) || 83.3732,
       });
       setMarker({
-        lat: parseInt(initialData.lat) || 26.7606,
-        lng: parseInt(initialData.lan) || 83.3732,
+        lat: Number(initialData.lat) || 26.7606,
+        lng: Number(initialData.lan) || 83.3732,
       });
     }
   }, [initialData]);
