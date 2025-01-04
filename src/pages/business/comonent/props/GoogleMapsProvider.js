@@ -1,7 +1,9 @@
+// GoogleMapsProvider.js
 import { useJsApiLoader } from "@react-google-maps/api";
 import { Box, CircularProgress, Typography } from "@mui/material";
+import React from "react";
 
-const GOOGLE_MAPS_API_KEY = "YOUR_API_KEY";
+const GOOGLE_MAPS_API_KEY = "AIzaSyCetgdiWmPHMxtMMAwbnQpQ-ogsMj27EQw";
 
 const GoogleMapsProvider = ({ children }) => {
   const { isLoaded, loadError } = useJsApiLoader({

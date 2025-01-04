@@ -33,11 +33,6 @@ function UpdateBusinessAddress({ initialData, onSave, onCancel }) {
   const [errorMessages, setErrorMessages] = useState({});
   const [modalMessage, setModalMessage] = useState("");
 
-  const { isLoaded, loadError } = useJsApiLoader({
-    googleMapsApiKey: GOOGLE_MAPS_API_KEY,
-    libraries: ["places"],
-  });
-
   const searchInputRef = useRef(null);
   const autocompleteServiceRef = useRef(null);
 
@@ -56,11 +51,11 @@ function UpdateBusinessAddress({ initialData, onSave, onCancel }) {
   }, [initialData]);
 
   useEffect(() => {
-    if (isLoaded) {
+    if (window.google && window.google.maps.places) {
       autocompleteServiceRef.current =
         new window.google.maps.places.AutocompleteService();
     }
-  }, [isLoaded]);
+  }, []);
 
   const handleSearchInputChange = () => {
     const input = searchInputRef.current?.value;
@@ -331,15 +326,15 @@ function UpdateBusinessAddress({ initialData, onSave, onCancel }) {
           ))
         )}
       </Box>
-      {isLoaded && (
-        <GoogleMap
-          center={region}
-          zoom={15}
-          mapContainerStyle={{ width: "100%", height: "300px" }}
-        >
-          <Marker position={marker} draggable onDragEnd={handleMarkerDragEnd} />
-        </GoogleMap>
-      )}
+
+      <GoogleMap
+        center={region}
+        zoom={15}
+        mapContainerStyle={{ width: "100%", height: "300px" }}
+      >
+        <Marker position={marker} draggable onDragEnd={handleMarkerDragEnd} />
+      </GoogleMap>
+
       <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-end" }}>
         <Button
           variant="contained"
