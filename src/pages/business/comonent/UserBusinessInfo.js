@@ -26,12 +26,20 @@ import {
   Room as RoomIcon,
   Edit as EditIcon,
 } from "@mui/icons-material";
+import dynamic from "next/dynamic";
 
 import UpdateBusinessInfo from "./props/UpdateBusinessInfo";
-import UpdateBusinessAddress from "./props/UpdateBusinessAddress";
+// import UpdateBusinessAddress from "./props/UpdateBusinessAddress";
 import UpdateBusinessContact from "./props/UpdateBusinessContact";
 import UpdateBusinessSocialMedia from "./props/UpdateBusinessSocialMedia";
 import GoogleMapsProvider from "./props/GoogleMapsProvider";
+// Dynamic imports
+const UpdateBusinessAddress = dynamic(
+  () => import("./props/UpdateBusinessAddress"),
+  {
+    ssr: false,
+  }
+);
 
 function UserBusinessInfo({ business, plan_id, onSave }) {
   const [isEditing, setIsEditing] = useState(null);

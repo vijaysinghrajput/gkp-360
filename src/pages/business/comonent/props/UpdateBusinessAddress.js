@@ -10,10 +10,13 @@ import {
   DialogContent,
   DialogActions,
 } from "@mui/material";
-import { GoogleMap, Marker } from "@react-google-maps/api";
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import axios from "axios";
+import { ProjectSetting } from "../../../../config/ProjectSetting";
 
-const UpdateBusinessAddress = ({ initialData, onSave, onCancel }) => {
+const GOOGLE_MAPS_API_KEY = "AIzaSyCetgdiWmPHMxtMMAwbnQpQ-ogsMj27EQw";
+
+function UpdateBusinessAddress({ initialData, onSave, onCancel }) {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [region, setRegion] = useState({
@@ -29,6 +32,11 @@ const UpdateBusinessAddress = ({ initialData, onSave, onCancel }) => {
   const [isFetchingLocation, setIsFetchingLocation] = useState(false);
   const [errorMessages, setErrorMessages] = useState({});
   const [modalMessage, setModalMessage] = useState("");
+
+  const { isLoaded, loadError } = useJsApiLoader({
+    googleMapsApiKey: GOOGLE_MAPS_API_KEY,
+    libraries: ["places"],
+  });
 
   const searchInputRef = useRef(null);
   const autocompleteServiceRef = useRef(null);
@@ -48,11 +56,11 @@ const UpdateBusinessAddress = ({ initialData, onSave, onCancel }) => {
   }, [initialData]);
 
   useEffect(() => {
-    if (window.google && window.google.maps) {
+    if (isLoaded) {
       autocompleteServiceRef.current =
         new window.google.maps.places.AutocompleteService();
     }
-  }, []);
+  }, [isLoaded]);
 
   const handleSearchInputChange = () => {
     const input = searchInputRef.current?.value;
@@ -122,6 +130,19 @@ const UpdateBusinessAddress = ({ initialData, onSave, onCancel }) => {
           lat: latitude,
           lan: longitude,
         };
+      }
+
+      const bigDataResponse = await axios.get(
+        `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
+      );
+
+      if (bigDataResponse.data) {
+        updatedAddress.city = bigDataResponse.data.city || "Unknown City";
+        updatedAddress.state =
+          bigDataResponse.data.principalSubdivision || "Unknown State";
+      } else {
+        updatedAddress.city = "Unknown City";
+        updatedAddress.state = "Unknown State";
       }
 
       setData((prev) => ({
@@ -310,15 +331,15 @@ const UpdateBusinessAddress = ({ initialData, onSave, onCancel }) => {
           ))
         )}
       </Box>
-
-      <GoogleMap
-        center={region}
-        zoom={15}
-        mapContainerStyle={{ width: "100%", height: "300px" }}
-      >
-        <Marker position={marker} draggable onDragEnd={handleMarkerDragEnd} />
-      </GoogleMap>
-
+      {isLoaded && (
+        <GoogleMap
+          center={region}
+          zoom={15}
+          mapContainerStyle={{ width: "100%", height: "300px" }}
+        >
+          <Marker position={marker} draggable onDragEnd={handleMarkerDragEnd} />
+        </GoogleMap>
+      )}
       <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-end" }}>
         <Button
           variant="contained"
@@ -353,6 +374,6 @@ const UpdateBusinessAddress = ({ initialData, onSave, onCancel }) => {
       </Dialog>
     </Box>
   );
-};
+}
 
 export default UpdateBusinessAddress;
