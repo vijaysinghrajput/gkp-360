@@ -31,6 +31,7 @@ import UpdateBusinessInfo from "./props/UpdateBusinessInfo";
 import UpdateBusinessAddress from "./props/UpdateBusinessAddress";
 import UpdateBusinessContact from "./props/UpdateBusinessContact";
 import UpdateBusinessSocialMedia from "./props/UpdateBusinessSocialMedia";
+import GoogleMapsProvider from "./props/GoogleMapsProvider";
 
 function UserBusinessInfo({ business, plan_id, onSave }) {
   const [isEditing, setIsEditing] = useState(null);
@@ -237,11 +238,13 @@ function UserBusinessInfo({ business, plan_id, onSave }) {
           )}
 
           {isEditing === "address" && (
-            <UpdateBusinessAddress
-              initialData={editableBusiness}
-              onSave={() => handleSave()}
-              onCancel={handleCancel}
-            />
+            <GoogleMapsProvider>
+              <UpdateBusinessAddress
+                initialData={editableBusiness}
+                onSave={() => handleSave()}
+                onCancel={handleCancel}
+              />
+            </GoogleMapsProvider>
           )}
           {isEditing === "contact" && (
             <UpdateBusinessContact
