@@ -115,19 +115,19 @@ function UserBusinessInfo({ business, plan_id, onSave }) {
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6}>
               <Typography variant="h6">Title</Typography>
-              <Typography>{editableBusiness.title || "N/A"}</Typography>
+              <Typography>{editableBusiness?.title || "N/A"}</Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
               <Typography variant="h6">Logo</Typography>
               <Avatar
-                src={editableBusiness.logo || ""}
+                src={editableBusiness?.logo || ""}
                 alt="Business Logo"
                 sx={{ width: 80, height: 80, marginBottom: 1 }}
               />
             </Grid>
             <Grid item xs={12}>
               <Typography variant="h6">Description</Typography>
-              <Typography>{editableBusiness.about || "N/A"}</Typography>
+              <Typography>{editableBusiness?.about || "N/A"}</Typography>
             </Grid>
           </Grid>
         </Paper>
@@ -155,7 +155,7 @@ function UserBusinessInfo({ business, plan_id, onSave }) {
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <Typography variant="h6">Full Address</Typography>
-              <Typography>{editableBusiness.full_address || "N/A"}</Typography>
+              <Typography>{editableBusiness?.full_address || "N/A"}</Typography>
             </Grid>
           </Grid>
         </Paper>
@@ -184,22 +184,22 @@ function UserBusinessInfo({ business, plan_id, onSave }) {
             <Grid item xs={12} sm={6}>
               <Typography variant="h6">Primary Number</Typography>
               <Typography>
-                {editableBusiness.primary_number || "N/A"}
+                {editableBusiness?.primary_number || "N/A"}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
               <Typography variant="h6">Other Number</Typography>
-              <Typography>{editableBusiness.other_number || "N/A"}</Typography>
+              <Typography>{editableBusiness?.other_number || "N/A"}</Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
               <Typography variant="h6">Whatsapp Number</Typography>
               <Typography>
-                {editableBusiness.whatsapp_number || "N/A"}
+                {editableBusiness?.whatsapp_number || "N/A"}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
               <Typography variant="h6">Email</Typography>
-              <Typography>{editableBusiness.email || "N/A"}</Typography>
+              <Typography>{editableBusiness?.email || "N/A"}</Typography>
             </Grid>
           </Grid>
         </Paper>
@@ -226,27 +226,27 @@ function UserBusinessInfo({ business, plan_id, onSave }) {
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6}>
               <Typography variant="h6">Website</Typography>
-              <Typography>{editableBusiness.website || "N/A"}</Typography>
+              <Typography>{editableBusiness?.website || "N/A"}</Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
               <Typography variant="h6">Instagram</Typography>
-              <Typography>{editableBusiness.instagram || "N/A"}</Typography>
+              <Typography>{editableBusiness?.instagram || "N/A"}</Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
               <Typography variant="h6">Facebook</Typography>
-              <Typography>{editableBusiness.facebook || "N/A"}</Typography>
+              <Typography>{editableBusiness?.facebook || "N/A"}</Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
               <Typography variant="h6">Twitter</Typography>
-              <Typography>{editableBusiness.twitter || "N/A"}</Typography>
+              <Typography>{editableBusiness?.twitter || "N/A"}</Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
               <Typography variant="h6">Youtube</Typography>
-              <Typography>{editableBusiness.youtube || "N/A"}</Typography>
+              <Typography>{editableBusiness?.youtube || "N/A"}</Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
               <Typography variant="h6">Google My Business</Typography>
-              <Typography>{editableBusiness.gmb || "N/A"}</Typography>
+              <Typography>{editableBusiness?.gmb || "N/A"}</Typography>
             </Grid>
           </Grid>
         </Paper>
