@@ -62,8 +62,8 @@ function UpdateBusinessInfo({ initialData, onSave, onCancel }) {
 
     const formData = new FormData();
     formData.append("listing_id", data?.listing_id);
-    formData.append("title", data.title);
-    formData.append("about", data.about);
+    formData.append("title", data?.title);
+    formData.append("about", data?.about);
     formData.append("listing_url", listingUrl);
 
     if (typeof data?.logo === "object") {
@@ -104,7 +104,7 @@ function UpdateBusinessInfo({ initialData, onSave, onCancel }) {
       <TextField
         fullWidth
         label="Business Name"
-        value={data.title}
+        value={data?.title}
         onChange={(e) => handleChange("title", e.target.value)}
         sx={{ marginBottom: 2 }}
       />
