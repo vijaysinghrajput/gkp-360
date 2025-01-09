@@ -32,6 +32,7 @@ const PostBusiness = () => {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  const [selectedMainCategory, setSelectedMainCategory] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedSubCategories, setSelectedSubCategories] = useState([]);
   const { user } = useAuth(); // Use AuthContext
@@ -68,7 +69,8 @@ const PostBusiness = () => {
     fetchPlanDetails();
   }, [planId]);
 
-  const handleSelectionChange = (categories, subCategories) => {
+  const handleSelectionChange = (mainCategory, categories, subCategories) => {
+    setSelectedMainCategory(mainCategory);
     setSelectedCategories(categories);
     setSelectedSubCategories(subCategories);
   };
@@ -79,6 +81,11 @@ const PostBusiness = () => {
     // Validate business name
     if (!businessName.trim()) {
       newErrors.businessName = "Business name is required.";
+    }
+
+    // Validate selected categories
+    if (!selectedMainCategory) {
+      newErrors.mainCategory = "Main business category is required.";
     }
 
     // Validate selected categories
@@ -146,6 +153,7 @@ const PostBusiness = () => {
       service_type: "Products and Services",
       listing_url: listingUrl,
       title: businessName,
+      maincategories: selectedMainCategory, // Send as array of values
       category: selectedCategories.map((cat) => cat.value), // Send as array of values
       subCategory: selectedSubCategories.map((subCat) => subCat.value), // Send as array of values
       street,
@@ -163,7 +171,7 @@ const PostBusiness = () => {
     //   "API URL:",
     //   `${ProjectSetting.APP_API_URL}/Billing/addNewBusinessWeb`
     // );
-    // console.log("Payload:", JSON.stringify(payload, null, 2));
+    console.log("Payload:", JSON.stringify(payload, null, 2));
 
     try {
       //   console.log(
@@ -192,7 +200,7 @@ const PostBusiness = () => {
 
       if (data.status === "success") {
         setSuccessMessage("Business added successfully!");
-        setTimeout(() => router.push("/dashboard"), 2000);
+        setTimeout(() => router.push("/dashboard"), 1);
       } else {
         setErrors((prev) => ({ ...prev, general: data.message }));
       }

@@ -88,7 +88,11 @@ function Lists() {
     { label: "Dashboard", icon: <DashboardIcon />, id: "dashboard" },
     { label: "Business Info", icon: <InfoIcon />, id: "business_info" },
     { label: "Business Category", icon: <InfoIcon />, id: "business_category" },
-    { label: "Plan Info", icon: <MonetizationOnIcon />, id: "plan_info" },
+    {
+      label: "Listing Plan Info",
+      icon: <MonetizationOnIcon />,
+      id: "listing_plan_info",
+    },
     { label: "Leads", icon: <TrendingUpIcon />, id: "leads" },
     { label: "Analytics", icon: <TrendingUpIcon />, id: "analytics" },
     { label: "Enquiry", icon: <ContactSupportIcon />, id: "enquiry" },
@@ -124,7 +128,7 @@ function Lists() {
         );
       case "business_category":
         return <UserBusinessCategoryList listing_id={listing_id} />;
-      case "plan_info":
+      case "listing_plan_info":
         return <UserPlanInfo listing_id={listing_id} plan={plan} />;
       case "leads":
         return (

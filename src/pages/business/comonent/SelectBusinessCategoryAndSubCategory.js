@@ -9,8 +9,10 @@ const SelectBusinessCategoryAndSubCategory = ({
   planDetails,
   newError,
 }) => {
+  const [mainCategories, setMainCategories] = useState([]);
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
+  const [selectedMainCategory, setSelectedMainCategory] = useState(null);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedSubCategories, setSelectedSubCategories] = useState([]);
   const [errors, setErrors] = useState({});
@@ -32,7 +34,15 @@ const SelectBusinessCategoryAndSubCategory = ({
             value: cat.id,
             label: cat.category_name,
           }));
+
+          const maincategoryOptions = response.data.main_category.map(
+            (cat) => ({
+              value: cat.id,
+              label: cat.category_name,
+            })
+          );
           setCategories(categoryOptions);
+          setMainCategories(maincategoryOptions);
         }
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -42,13 +52,19 @@ const SelectBusinessCategoryAndSubCategory = ({
     fetchCategories();
   }, []);
 
+  const handleMainCategoryChange = (selected) => {
+    setSelectedMainCategory(selected);
+    // Notify parent about changes, including the main category
+    onSelectionChange(selected, selectedCategories, selectedSubCategories);
+  };
+
   const handleCategoryChange = (selected) => {
     let validationError = "";
 
     // Validation based on plan ID
     if (planDetails.plan_id == 1 && selected.length > 1) {
-      validationError = `You can select up to 1 category only in Plan ${planDetails.plan_name}`;
-    } else if (planDetails.plan_id == 2 && selected.length > 3) {
+      validationError = `You can select up to 1 categories only in Plan ${planDetails.plan_name}`;
+    } else if (planDetails.plan_id == 3 && selected.length > 3) {
       validationError = `You can select up to 3 categories only in Plan ${planDetails.plan_name}`;
     } else if (planDetails.plan_id == 3 && selected.length > 5) {
       validationError = `You can select up to 5 categories only in Plan ${planDetails.plan_name}`;
@@ -64,11 +80,17 @@ const SelectBusinessCategoryAndSubCategory = ({
     setSelectedCategories(selected);
     setErrors((prev) => ({ ...prev, categories: null }));
 
-    // Extract category IDs
-    const categoryIds = selected.map((item) => item.value);
+    // Clear subcategories as categories have changed
+    setSubCategories([]);
+    setSelectedSubCategories([]);
+
+    // Notify parent about the changes
+    onSelectionChange(selectedMainCategory, selected, []);
 
     // Fetch subcategories if any categories are selected
-    if (categoryIds.length > 0) {
+    if (selected.length > 0) {
+      const categoryIds = selected.map((item) => item.value);
+
       axios
         .post(`${ProjectSetting.APP_API_URL}/Billing/getSubCategories`, {
           category_ids: categoryIds,
@@ -88,23 +110,37 @@ const SelectBusinessCategoryAndSubCategory = ({
           console.error("Error fetching subcategories:", error);
           setSubCategories([]);
         });
-    } else {
-      setSubCategories([]);
     }
-
-    // Notify parent about the changes
-    onSelectionChange(selected, selectedSubCategories);
   };
 
   const handleSubCategoryChange = (selected) => {
     setSelectedSubCategories(selected);
 
     // Notify parent about changes
-    onSelectionChange(selectedCategories, selected);
+    onSelectionChange(selectedMainCategory, selectedCategories, selected);
   };
-
   return (
     <div>
+      <Typography variant="h6" sx={{ marginBottom: 1 }}>
+        Main Business Category
+      </Typography>
+      <Select
+        options={mainCategories}
+        onChange={handleMainCategoryChange}
+        value={selectedMainCategory}
+        placeholder="Select main category"
+        isClearable
+        maxMenuHeight={250}
+        styles={{
+          menu: (base) => ({ ...base, zIndex: 10 }),
+        }}
+      />
+      {errors.mainCategory && (
+        <Typography variant="body2" color="error" sx={{ marginTop: 1 }}>
+          {errors.mainCategory}
+        </Typography>
+      )}
+
       <Typography variant="h6" sx={{ marginBottom: 1 }}>
         Business Category
       </Typography>
@@ -125,6 +161,7 @@ const SelectBusinessCategoryAndSubCategory = ({
           {errors.categories}
         </Typography>
       )}
+
       <Typography variant="h6" sx={{ marginTop: 2, marginBottom: 1 }}>
         Business Subcategory
       </Typography>
