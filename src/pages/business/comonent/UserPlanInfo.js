@@ -11,7 +11,7 @@ import {
 function UserPlanInfo({ listing_id, plan }) {
   const planFields = [
     {
-      label: "Plan Name",
+      label: "Plan Name ",
       value: plan?.plan_name,
       icon: <MonetizationOnIcon />,
     },
