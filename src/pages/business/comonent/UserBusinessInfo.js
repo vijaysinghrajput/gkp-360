@@ -34,12 +34,12 @@ import UpdateBusinessContact from "./props/UpdateBusinessContact";
 import UpdateBusinessSocialMedia from "./props/UpdateBusinessSocialMedia";
 import GoogleMapsProvider from "./props/GoogleMapsProvider";
 // Dynamic imports
-const UpdateBusinessAddress = dynamic(
-  () => import("./props/UpdateBusinessAddress"),
-  {
-    ssr: false,
-  }
-);
+// const UpdateBusinessAddress = dynamic(
+//   () => import("./props/UpdateBusinessAddress"),
+//   {
+//     ssr: false,
+//   }
+// );
 
 function UserBusinessInfo({ business, plan_id, onSave }) {
   const [isEditing, setIsEditing] = useState(null);
@@ -262,7 +262,7 @@ function UserBusinessInfo({ business, plan_id, onSave }) {
               />
             )}
 
-            {isEditing === "address" && (
+            {/* {isEditing === "address" && (
               <>
                 <UpdateBusinessAddress
                   initialData={editableBusiness}
@@ -270,7 +270,7 @@ function UserBusinessInfo({ business, plan_id, onSave }) {
                   onCancel={handleCancel}
                 />
               </>
-            )}
+            )} */}
             {isEditing === "contact" && (
               <UpdateBusinessContact
                 initialData={editableBusiness}
