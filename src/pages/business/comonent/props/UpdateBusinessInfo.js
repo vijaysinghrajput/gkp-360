@@ -114,7 +114,7 @@ function UpdateBusinessInfo({ initialData, onSave, onCancel }) {
         label="Description"
         multiline
         rows={4}
-        value={data.about}
+        value={data?.about}
         onChange={(e) => handleChange("about", e.target.value)}
         sx={{ marginBottom: 2 }}
       />
