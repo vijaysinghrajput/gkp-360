@@ -181,7 +181,6 @@ export default function BusinessCategory() {
 
         {/* Full Width Grid Layout */}
         <Grid container spacing={2} sx={{ padding: 2 }}>
-          {/* Category List */}
           <Grid item xs={12} md={4}>
             <Box sx={{ backgroundColor: "#fff", padding: 2, borderRadius: 2 }}>
               <Typography
