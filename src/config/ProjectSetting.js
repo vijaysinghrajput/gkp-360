@@ -5,7 +5,7 @@ export const ProjectSetting = {
   COMPANY_ADDRESS: "Vasundha Taramandal, Gorakhpur",
   COMPANY_CITY: "Superg",
   COMPANY_EMAIL: "contact@gkp360.com",
-  COMPANY_CONTACT_NUMBER_1: "6391000415",
+  COMPANY_CONTACT_NUMBER_1: "+916391000415",
   COMPANY_WHATSAPP_NUMBER: "6391000415",
   API_URL: "https://api.gkp360.com/WEBSITE-API",
   APP_API_URL: "https://api.gkp360.com/APP-API",

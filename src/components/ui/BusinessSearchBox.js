@@ -43,17 +43,15 @@ export default function BusinessSearchBox() {
   return (
     <Box sx={{ width: "100%", p: 2 }}>
       {/* SEO-Friendly Title */}
-      <Typography
-        variant="h1"
-        sx={{
-          fontSize: { xs: "24px", md: "32px" },
+      <h1
+        style={{
+          fontSize: "24px", // Small screens
           textAlign: "center",
-          mb: 3,
+          marginBottom: "24px",
         }}
       >
         Find the Best Businesses in Your City - Search by Category and Location
-      </Typography>
-
+      </h1>
       <Grid container spacing={2}>
         {/* List Your Business Section */}
         <Grid item xs={12} md={3}>
