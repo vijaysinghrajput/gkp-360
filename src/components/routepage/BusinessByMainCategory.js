@@ -1,18 +1,7 @@
 import { useEffect, useState } from "react";
-import {
-  Box,
-  Typography,
-  CircularProgress,
-  Grid,
-  Card,
-  CardContent,
-  CardMedia,
-  TextField,
-  Button,
-  Link,
-} from "@mui/material";
+import { Box, Typography, CircularProgress, Grid, Button } from "@mui/material";
 import HeadSeo from "../seo/HeadSeo";
-// import BusinessByCategorySchemaList from "../seo/business/BusinessByCategorySchemaList";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import BusinessMaincategoryLists from "../../pages/business/comonent/BusinessMaincategoryLists";
 import BusinessListCardRactangular from "../../pages/business/comonent/BusinessListCardRactangular";
@@ -23,7 +12,6 @@ import BusinessSearchBox from "../ui/BusinessSearchBox";
 export default function BusinessByMainCategory({ categoryslug, categoryid }) {
   const [businesses, setBusinesses] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [currentCategory, setCurrentCategory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const router = useRouter();
@@ -35,6 +23,9 @@ export default function BusinessByMainCategory({ categoryslug, categoryid }) {
       .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize the first letter of each word
 
   const title = `${toTitleCase(categoryslug)}`;
+  const dynamicDescription = businesses.length
+    ? `Explore the best ${title} with ${businesses.length} businesses listed on ${ProjectSetting.COMPANY_NAME}. Find top-rated services, reviews, and detailed information to help you make informed decisions.`
+    : `Discover top ${title} businesses on ${ProjectSetting.COMPANY_NAME}. Find services, reviews, and essential information tailored to your needs.`;
 
   useEffect(() => {
     if (categoryid && categoryslug) {
@@ -43,20 +34,15 @@ export default function BusinessByMainCategory({ categoryslug, categoryid }) {
   }, [categoryid, categoryslug]);
 
   const fetchBusinesses = async () => {
-    console.log("categoryid", categoryid);
     try {
       const response = await fetch(
         `${ProjectSetting.API_URL}/Website/getBusinessesbyMainCategory?categoryid=${categoryid}`
       );
-
       const data = await response.json();
-
-      //   console.log("data.categories.current_category", data.categories);
 
       if (data.status === "success") {
         setBusinesses(data.data);
         setCategories(data.category);
-        // setCurrentCategory(data.categories?.current_category);
       } else {
         setBusinesses([]);
         setError(
@@ -70,6 +56,21 @@ export default function BusinessByMainCategory({ categoryslug, categoryid }) {
     } finally {
       setLoading(false);
     }
+  };
+
+  const WebPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: `${title} - ${ProjectSetting.COMPANY_NAME}`,
+    description: dynamicDescription,
+    url: `${
+      ProjectSetting.COMPANY_WEBSITE + "/" + categoryslug + "/" + categoryid
+    }/business-main-category`,
+    author: {
+      "@type": "Organization",
+      name: ProjectSetting.COMPANY_NAME,
+      url: `${ProjectSetting.COMPANY_WEBSITE}`,
+    },
   };
 
   if (loading) {
@@ -114,14 +115,32 @@ export default function BusinessByMainCategory({ categoryslug, categoryid }) {
 
   return (
     <>
-      <HeadSeo
-        title={title}
-        description="Your gateway to discovering businesses, jobs, properties, and more."
-        canonical="https://gkp360.com/"
-      />
-      {/* Ad Banner */}
+      <Head>
+        {/* WebPage Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(WebPageSchema),
+          }}
+        />
+      </Head>
 
-      {/* SEO Main Title */}
+      <HeadSeo
+        title={`${title} - ${ProjectSetting.COMPANY_NAME}`}
+        description={dynamicDescription}
+        canonical={`${
+          ProjectSetting.COMPANY_WEBSITE + "/" + categoryslug + "/" + categoryid
+        }/business-main-category`}
+        keywords={categories
+          .map((category) => category.category_name)
+          .join(", ")}
+        author={ProjectSetting.COMPANY_NAME}
+        robots="index, follow"
+        favicon={ProjectSetting.favicon}
+        ogImage={ProjectSetting.LOGO_URL}
+        twitterImage={ProjectSetting.LOGO_URL}
+        language="en"
+      />
 
       <Box
         sx={{
@@ -133,8 +152,6 @@ export default function BusinessByMainCategory({ categoryslug, categoryid }) {
       >
         <BusinessSearchBox title={title} />
       </Box>
-
-      {/* SEO Friendly Links */}
 
       <Box
         sx={{
@@ -167,7 +184,7 @@ export default function BusinessByMainCategory({ categoryslug, categoryid }) {
             />
           </Grid>
 
-          {/* categories Column (4 Grid) */}
+          {/* Categories Column (4 Grid) */}
           <Grid item xs={12} md={4}>
             <BusinessMaincategoryLists
               mainCategoryName={title}
