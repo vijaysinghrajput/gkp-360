@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { Box, CircularProgress, Typography } from "@mui/material";
-import BusinessByCategory from "../../components/routepage/BusinessByCategory";
+import BusinessByAllCategoryPage from "../../components/routepage/BusinessByAllCategoryPage";
 import BusinessByMainCategory from "../../components/routepage/BusinessByMainCategory";
 import BusinessDetailsPage from "../../components/routepage/BusinessDetailsPage";
 
@@ -32,17 +32,18 @@ const DynamicPage = () => {
   console.log("routingParam", routingParam);
 
   switch (routingParam) {
-    case "business":
-      return (
-        <BusinessByCategory
-          categorySlug={categoryslug}
-          id={id}
-          additionalParams={otherParams}
-        />
-      );
     case "business-main-category":
       return (
         <BusinessByMainCategory categoryslug={categoryslug} categoryid={id} />
+      );
+    case "business-category":
+      return (
+        <BusinessByAllCategoryPage
+          categoryslug={categoryslug}
+          city="gorakhpur"
+          state="uttar-pradesh"
+          categoryid={id}
+        />
       );
 
     case "business-profile":
