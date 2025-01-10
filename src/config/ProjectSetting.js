@@ -13,4 +13,6 @@ export const ProjectSetting = {
     "https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png",
   LOGO_URL:
     "https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png",
+  favicon:
+    "https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png",
 };

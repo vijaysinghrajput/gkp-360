@@ -12,7 +12,7 @@ import BusinessIcon from "@mui/icons-material/Business";
 import { useRouter } from "next/router";
 import { ProjectSetting } from "../../config/ProjectSetting";
 
-const BusinessLists = ({ businesses, categoryName }) => {
+const BusinessListsForBusinessPage = ({ businesses }) => {
   const router = useRouter();
 
   const handleCardClick = (listing_url, listing_id) => {
@@ -22,11 +22,12 @@ const BusinessLists = ({ businesses, categoryName }) => {
   return (
     <Box
       sx={{
-        backgroundColor: "#fff",
-        borderRadius: "8px",
-        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
-        padding: "16px",
-        textAlign: "left",
+        maxHeight: "calc(100vh - 150px)", // Dynamic height
+        overflowY: "auto", // Scrollable
+        padding: 1,
+        border: "1px solid #ddd",
+        borderRadius: 1,
+        backgroundColor: "#f9f9f9",
       }}
     >
       {businesses.length === 0 ? (
@@ -106,7 +107,7 @@ const BusinessLists = ({ businesses, categoryName }) => {
                         }}
                       />
                       <Typography variant="body2" color="text.secondary">
-                        {categoryName}
+                        {business?.primary_category_name}
                       </Typography>
                     </Box>
                     <Box
@@ -137,4 +138,4 @@ const BusinessLists = ({ businesses, categoryName }) => {
   );
 };
 
-export default BusinessLists;
+export default BusinessListsForBusinessPage;

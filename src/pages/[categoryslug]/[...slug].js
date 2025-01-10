@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import BusinessByCategory from "../../components/routepage/BusinessByCategory";
+import BusinessByMainCategory from "../../components/routepage/BusinessByMainCategory";
 import BusinessDetailsPage from "../../components/routepage/BusinessDetailsPage";
 
 const DynamicPage = () => {
@@ -25,6 +26,11 @@ const DynamicPage = () => {
   const routingParam = slug[slug.length - 1]; // Last element as routing parameter
   const otherParams = slug.slice(1, -1); // All intermediate parameters
 
+  console.log("id", id);
+  console.log("routingParam", routingParam);
+  console.log("otherParams", otherParams);
+  console.log("routingParam", routingParam);
+
   switch (routingParam) {
     case "business":
       return (
@@ -34,6 +40,8 @@ const DynamicPage = () => {
           additionalParams={otherParams}
         />
       );
+    case "business-main-category":
+      return <BusinessByMainCategory titles={categoryslug} listing_id={id} />;
 
     case "business-profile":
       return <BusinessDetailsPage titles={categoryslug} listing_id={id} />;

@@ -1,9 +1,31 @@
 import React from "react";
-import { Card, CardContent, CardActionArea, Typography } from "@mui/material";
+import {
+  Card,
+  Box,
+  CardContent,
+  CardActionArea,
+  Typography,
+} from "@mui/material";
+import { useRouter } from "next/router";
 
-const BusinessMainCategoryList = ({ category, onCategoryClick }) => {
+const BusinessMainCategoryList = ({ category }) => {
+  const router = useRouter();
+
+  const handleCategoryClick = (category_slug, id) => {
+    router.push(`/${category_slug}/${id}/business-main-category`);
+  };
+
   return (
-    <>
+    <Box
+      sx={{
+        maxHeight: "calc(100vh - 150px)", // Dynamic height
+        overflowY: "auto", // Scrollable
+        padding: 1,
+        border: "1px solid #ddd",
+        borderRadius: 1,
+        backgroundColor: "#f9f9f9",
+      }}
+    >
       {category.map((cat) => (
         <Card
           key={cat.id}
@@ -12,7 +34,7 @@ const BusinessMainCategoryList = ({ category, onCategoryClick }) => {
             cursor: "pointer",
             backgroundColor: "#fff",
           }}
-          onClick={() => onCategoryClick(cat)}
+          onClick={() => handleCategoryClick(cat.category_slug, cat.id)}
         >
           <CardActionArea>
             <CardContent>
@@ -21,7 +43,7 @@ const BusinessMainCategoryList = ({ category, onCategoryClick }) => {
           </CardActionArea>
         </Card>
       ))}
-    </>
+    </Box>
   );
 };
 
