@@ -90,10 +90,10 @@ const BusinessListCardRectangular = ({
               }}
             >
               {city && state
-                ? `Top ${categoryName} in ${toTitleCase(city)}, ${toTitleCase(
-                    state
-                  )}`
-                : `Top ${categoryName}`}
+                ? `Top ${categoryName} Business in ${toTitleCase(
+                    city
+                  )}, ${toTitleCase(state)}`
+                : `Top ${categoryName} Business`}
             </Typography>
 
             {/* Business Cards */}
