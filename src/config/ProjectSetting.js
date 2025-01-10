@@ -15,4 +15,9 @@ export const ProjectSetting = {
     "https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png",
   favicon:
     "https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png",
+  SOCIAL_MEDIA_LINKS: [
+    "https://facebook.com/YourPage",
+    "https://twitter.com/YourPage",
+    "https://linkedin.com/company/YourPage",
+  ],
 };

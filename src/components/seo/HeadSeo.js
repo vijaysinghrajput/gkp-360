@@ -1,5 +1,7 @@
 import Head from "next/head";
 
+import { ProjectSetting } from "@/config/ProjectSetting";
+
 export default function HeadSeo({
   title,
   description,
@@ -12,6 +14,36 @@ export default function HeadSeo({
   twitterImage,
   language = "en",
 }) {
+  // Organization Schema
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: ProjectSetting.COMPANY_NAME,
+    url: ProjectSetting.COMPANY_WEBSITE,
+    logo: ProjectSetting.LOGO_URL,
+    contactPoint: {
+      "@type": "ContactPoint",
+      telephone: ProjectSetting.COMPANY_CONTACT_NUMBER_1,
+      contactType: "Customer Service",
+      areaServed: "Worldwide",
+      availableLanguage: "English",
+    },
+    sameAs: ProjectSetting.SOCIAL_MEDIA_LINKS, // Add social media URLs (array)
+  };
+
+  // Website Schema
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: ProjectSetting.COMPANY_NAME,
+    url: ProjectSetting.COMPANY_WEBSITE,
+    potentialAction: {
+      "@type": "SearchAction",
+      target: `${ProjectSetting.COMPANY_WEBSITE}/search?q={search_term_string}`,
+      "query-input": "required name=search_term_string",
+    },
+  };
+
   return (
     <Head>
       {/* Primary Meta Tags */}
@@ -51,6 +83,15 @@ export default function HeadSeo({
       {/* Preloading and Performance */}
       {canonical && <link rel="preload" as="fetch" href={canonical} />}
       <link rel="dns-prefetch" href={canonical} />
+      {/* JSON-LD Schemas */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+      />
     </Head>
   );
 }
