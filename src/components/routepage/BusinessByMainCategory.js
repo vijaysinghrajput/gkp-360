@@ -14,14 +14,15 @@ import {
 import HeadSeo from "../seo/HeadSeo";
 // import BusinessByCategorySchemaList from "../seo/business/BusinessByCategorySchemaList";
 import { useRouter } from "next/router";
-import BusinessSubacategoryLists from "../../pages/business/comonent/BusinessSubacategoryLists";
+import BusinessMaincategoryLists from "../../pages/business/comonent/BusinessMaincategoryLists";
 import BusinessListCardRactangular from "../../pages/business/comonent/BusinessListCardRactangular";
-import BusinessBreadcrumbList from "../../pages/business/comonent/BusinessBreadcrumbList";
+import BusinessBreadcrumbListForMainCategory from "../../pages/business/comonent/props/breadcrumblist/BusinessBreadcrumbListForMainCategory";
 import { ProjectSetting } from "../../config/ProjectSetting";
+import BusinessSearchBox from "../ui/BusinessSearchBox";
 
 export default function BusinessByMainCategory({ categoryslug, categoryid }) {
   const [businesses, setBusinesses] = useState([]);
-  const [subcategories, setSubcategories] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [currentCategory, setCurrentCategory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -42,6 +43,7 @@ export default function BusinessByMainCategory({ categoryslug, categoryid }) {
   }, [categoryid, categoryslug]);
 
   const fetchBusinesses = async () => {
+    console.log("categoryid", categoryid);
     try {
       const response = await fetch(
         `${ProjectSetting.API_URL}/Website/getBusinessesbyMainCategory?categoryid=${categoryid}`
@@ -49,12 +51,12 @@ export default function BusinessByMainCategory({ categoryslug, categoryid }) {
 
       const data = await response.json();
 
-      console.log("data.subcategories.current_category", data.subcategories);
+      //   console.log("data.categories.current_category", data.categories);
 
       if (data.status === "success") {
         setBusinesses(data.data);
-        setSubcategories(data.subcategories);
-        setCurrentCategory(data.subcategories?.current_category);
+        setCategories(data.category);
+        // setCurrentCategory(data.categories?.current_category);
       } else {
         setBusinesses([]);
         setError(
@@ -120,22 +122,32 @@ export default function BusinessByMainCategory({ categoryslug, categoryid }) {
       {/* Ad Banner */}
 
       {/* SEO Main Title */}
-      <Typography
-        variant="h4"
-        align="center"
-        marginBottom={2}
-        fontWeight="bold"
+
+      <Box
+        sx={{
+          backgroundColor: "#fff",
+          padding: "10px 20px",
+          borderBottom: "1px solid #ddd",
+          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+        }}
       >
-        {title}
-      </Typography>
+        <BusinessSearchBox title={title} />
+      </Box>
 
       {/* SEO Friendly Links */}
 
-      {/* <BusinessBreadcrumbList
-        currentCategory={currentCategory}
-        city={city}
-        state={state}
-      /> */}
+      <Box
+        sx={{
+          padding: { xs: 2, sm: 3, md: 4 },
+          bgcolor: "#f9f9f9",
+        }}
+      >
+        <BusinessBreadcrumbListForMainCategory
+          title={title}
+          slug={categoryslug}
+          id={categoryid}
+        />
+      </Box>
 
       <Box
         sx={{
@@ -155,14 +167,12 @@ export default function BusinessByMainCategory({ categoryslug, categoryid }) {
             />
           </Grid>
 
-          {/* Subcategories Column (4 Grid) */}
+          {/* categories Column (4 Grid) */}
           <Grid item xs={12} md={4}>
-            {/* <BusinessSubacategoryLists
-              mainCategoryName={currentCategory.main_category_name}
-              subcategories={subcategories.subcategories}
-              city={city}
-              state={state}
-            /> */}
+            <BusinessMaincategoryLists
+              mainCategoryName={title}
+              categories={categories}
+            />
           </Grid>
         </Grid>
       </Box>

@@ -176,11 +176,7 @@ export default function BusinessCategory() {
             boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
           }}
         >
-          <BusinessSearchBox
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            onSearch={handleSearch}
-          />
+          <BusinessSearchBox title="Find the Best Businesses in Your City - Search by Category and Location" />
         </Box>
 
         {/* Full Width Grid Layout */}

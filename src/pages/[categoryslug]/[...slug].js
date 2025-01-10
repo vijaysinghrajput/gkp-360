@@ -41,7 +41,9 @@ const DynamicPage = () => {
         />
       );
     case "business-main-category":
-      return <BusinessByMainCategory titles={categoryslug} listing_id={id} />;
+      return (
+        <BusinessByMainCategory categoryslug={categoryslug} categoryid={id} />
+      );
 
     case "business-profile":
       return <BusinessDetailsPage titles={categoryslug} listing_id={id} />;

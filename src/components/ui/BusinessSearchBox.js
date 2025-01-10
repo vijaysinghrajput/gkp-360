@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import SearchCity from "./SearchCity";
 import SearchBusinessCategory from "./SearchBusinessCategory";
 
-export default function BusinessSearchBox() {
+export default function BusinessSearchBox({ title }) {
   const [location, setLocation] = useState({ city: "", state: "" });
   const [selectedCategory, setSelectedCategory] = useState({
     id: null,
@@ -50,7 +50,7 @@ export default function BusinessSearchBox() {
           marginBottom: "24px",
         }}
       >
-        Find the Best Businesses in Your City - Search by Category and Location
+        {title}
       </h1>
       <Grid container spacing={2}>
         {/* List Your Business Section */}
