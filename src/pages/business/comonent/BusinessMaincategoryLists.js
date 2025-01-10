@@ -43,7 +43,7 @@ const BusinessMaincategoryLists = ({ mainCategoryName, categories }) => {
       "@type": "ListItem",
       position: index + 1,
       name: subcategory.category_name,
-      url: `${domain}/${subcategory?.category_name_slug}/${subcategory?.id}/business`,
+      url: `${domain}/${subcategory?.category_name_slug}/${subcategory?.id}/business-category`,
     })),
   };
 
@@ -83,7 +83,7 @@ const BusinessMaincategoryLists = ({ mainCategoryName, categories }) => {
           {displayedCategories?.map((subcategory, index) => (
             <React.Fragment key={subcategory.id}>
               <Link
-                href={`/${subcategory?.category_name_slug}/${subcategory?.id}/business`}
+                href={`/${subcategory?.category_name_slug}/${subcategory?.id}/business-category`}
                 passHref
                 style={{ textDecoration: "none" }}
                 title={`${subcategory.category_name}`}

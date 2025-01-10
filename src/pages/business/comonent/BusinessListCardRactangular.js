@@ -30,9 +30,7 @@ const BusinessListCardRectangular = ({
       .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize the first letter of each word
 
   const handleCardClick = (listing_url, listing_id) => {
-    router.push(
-      `/${listing_url}/${city}/${state}/${listing_id}/business-profile`
-    );
+    router.push(`/${listing_url}/${listing_id}/business-profile`);
   };
 
   // Schema for the item list
