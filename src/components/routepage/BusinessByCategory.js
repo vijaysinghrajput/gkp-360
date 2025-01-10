@@ -1,23 +1,12 @@
 import { useEffect, useState } from "react";
-import {
-  Box,
-  Typography,
-  CircularProgress,
-  Grid,
-  Card,
-  CardContent,
-  CardMedia,
-  TextField,
-  Button,
-  Link,
-} from "@mui/material";
+import { Box, Typography, CircularProgress, Grid, Button } from "@mui/material";
 import HeadSeo from "../seo/HeadSeo";
-// import BusinessByCategorySchemaList from "../seo/business/BusinessByCategorySchemaList";
 import { useRouter } from "next/router";
 import BusinessSubacategoryLists from "../../pages/business/comonent/BusinessSubacategoryLists";
 import BusinessListCardRactangular from "../../pages/business/comonent/BusinessListCardRactangular";
 import BusinessBreadcrumbList from "../../pages/business/comonent/BusinessBreadcrumbList";
 import { ProjectSetting } from "../../config/ProjectSetting";
+import Head from "next/head";
 
 export default function BusinessByCategory({
   categoryslug,
@@ -56,8 +45,6 @@ export default function BusinessByCategory({
 
       const data = await response.json();
 
-      console.log("data.subcategories.current_category", data.subcategories);
-
       if (data.status === "success") {
         setBusinesses(data.data);
         setSubcategories(data.subcategories);
@@ -75,6 +62,54 @@ export default function BusinessByCategory({
     } finally {
       setLoading(false);
     }
+  };
+
+  // Dynamic description
+  const dynamicDescription = businesses.length
+    ? `Explore top-rated ${toTitleCase(
+        categoryslug
+      )} businesses in ${toTitleCase(city)}, ${toTitleCase(state)} with ${
+        businesses.length
+      } listings on ${
+        ProjectSetting.COMPANY_NAME
+      }. Find reviews, services, and trusted businesses tailored to your needs.`
+    : `Discover top ${toTitleCase(categoryslug)} businesses in ${toTitleCase(
+        city
+      )}, ${toTitleCase(state)} on ${
+        ProjectSetting.COMPANY_NAME
+      }. Explore services, reviews, and more.`;
+
+  // Dynamic keywords
+  const dynamicKeywords = subcategories?.subcategories
+    ?.map(
+      (category) =>
+        `${category.category_name} in ${toTitleCase(city)}, ${toTitleCase(
+          state
+        )}`
+    )
+    .join(", ");
+
+  const WebPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: `${title} - ${ProjectSetting.COMPANY_NAME}`,
+    description: dynamicDescription,
+    url: `${
+      ProjectSetting.COMPANY_WEBSITE +
+      "/" +
+      categoryslug +
+      "/" +
+      city +
+      "/" +
+      state +
+      "/" +
+      categoryid
+    }/business`,
+    author: {
+      "@type": "Organization",
+      name: ProjectSetting.COMPANY_NAME,
+      url: `${ProjectSetting.COMPANY_WEBSITE}`,
+    },
   };
 
   if (loading) {
@@ -119,12 +154,38 @@ export default function BusinessByCategory({
 
   return (
     <>
+      <Head>
+        {/* WebPage Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(WebPageSchema),
+          }}
+        />
+      </Head>
+
       <HeadSeo
-        title={title}
-        description="Your gateway to discovering businesses, jobs, properties, and more."
-        canonical="https://gkp360.com/"
+        title={`${title} - ${ProjectSetting.COMPANY_NAME}`}
+        description={dynamicDescription}
+        canonical={`${
+          ProjectSetting.COMPANY_WEBSITE +
+          "/" +
+          categoryslug +
+          "/" +
+          city +
+          "/" +
+          state +
+          "/" +
+          categoryid
+        }/business`}
+        keywords={dynamicKeywords}
+        author={ProjectSetting.COMPANY_NAME}
+        robots="index, follow"
+        favicon={ProjectSetting.favicon}
+        ogImage={ProjectSetting.LOGO_URL}
+        twitterImage={ProjectSetting.LOGO_URL}
+        language="en"
       />
-      {/* Ad Banner */}
 
       {/* SEO Main Title */}
       <Typography
@@ -137,7 +198,6 @@ export default function BusinessByCategory({
       </Typography>
 
       {/* SEO Friendly Links */}
-
       <BusinessBreadcrumbList
         currentCategory={currentCategory}
         city={city}

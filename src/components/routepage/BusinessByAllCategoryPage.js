@@ -20,6 +20,7 @@ import BusinessAllSubacategoryLists from "../../pages/business/comonent/Business
 import BusinessListCardRactangular from "../../pages/business/comonent/BusinessListCardRactangular";
 import { ProjectSetting } from "../../config/ProjectSetting";
 import BusinessBreadcrumbListForAllCategory from "@/pages/business/comonent/props/breadcrumblist/BusinessBreadcrumbListForAllCategory";
+import BusinessSearchBox from "../ui/BusinessSearchBox";
 
 export default function BusinessByAllCategoryPage({
   categoryslug,
@@ -160,20 +161,31 @@ export default function BusinessByAllCategoryPage({
         twitterImage={ProjectSetting.LOGO_URL}
         language="en"
       />
+      <Box
+        sx={{
+          backgroundColor: "#fff",
+          padding: "10px 20px",
+          borderBottom: "1px solid #ddd",
+          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        <BusinessSearchBox title={title} />
+      </Box>
 
       {/* SEO Main Title */}
-      <Typography
-        variant="h4"
-        align="center"
-        marginBottom={2}
-        fontWeight="bold"
-      >
-        {title}
-      </Typography>
 
       {/* SEO Friendly Links */}
 
-      <BusinessBreadcrumbListForAllCategory currentCategory={currentCategory} />
+      <Box
+        sx={{
+          padding: { xs: 2, sm: 3, md: 4 },
+          bgcolor: "#f9f9f9",
+        }}
+      >
+        <BusinessBreadcrumbListForAllCategory
+          currentCategory={currentCategory}
+        />
+      </Box>
 
       <Box
         sx={{
