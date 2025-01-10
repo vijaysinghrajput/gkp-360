@@ -87,32 +87,6 @@ export default function BusinessByMainCategory({ categoryslug, categoryid }) {
     );
   }
 
-  if (error) {
-    return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        height="100vh"
-        flexDirection="column"
-        bgcolor="#f9f9f9"
-        p={3}
-      >
-        <Typography variant="h6" color="error" align="center" marginBottom={2}>
-          {error}
-        </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={fetchBusinesses}
-          sx={{ mt: 2 }}
-        >
-          Retry
-        </Button>
-      </Box>
-    );
-  }
-
   return (
     <>
       <Head>
@@ -177,12 +151,14 @@ export default function BusinessByMainCategory({ categoryslug, categoryid }) {
       >
         <Grid container spacing={3} sx={{ flexGrow: 1 }}>
           {/* Businesses Column (8 Grid) */}
-          <Grid item xs={12} md={8}>
-            <BusinessListCardRactangular
-              categoryName={toTitleCase(categoryslug)}
-              businesses={businesses}
-            />
-          </Grid>
+          {!error && (
+            <Grid item xs={12} md={8}>
+              <BusinessListCardRactangular
+                categoryName={toTitleCase(categoryslug)}
+                businesses={businesses}
+              />
+            </Grid>
+          )}
 
           {/* Categories Column (4 Grid) */}
           <Grid item xs={12} md={4}>

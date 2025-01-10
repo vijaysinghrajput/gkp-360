@@ -12,6 +12,8 @@ import {
   Link,
 } from "@mui/material";
 import HeadSeo from "../seo/HeadSeo";
+import Head from "next/head";
+
 // import BusinessByCategorySchemaList from "../seo/business/BusinessByCategorySchemaList";
 import { useRouter } from "next/router";
 import BusinessAllSubacategoryLists from "../../pages/business/comonent/BusinessAllSubacategoryLists";
@@ -37,6 +39,10 @@ export default function BusinessByAllCategoryPage({
       .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize the first letter of each word
 
   const title = `${toTitleCase(categoryslug)}`;
+
+  const dynamicDescription = businesses.length
+    ? `Explore the best ${title} with ${businesses.length} businesses listed on ${ProjectSetting.COMPANY_NAME}. Find top-rated services, reviews, and detailed information to help you make informed decisions.`
+    : `Discover top ${title} businesses on ${ProjectSetting.COMPANY_NAME}. Find services, reviews, and essential information tailored to your needs.`;
 
   useEffect(() => {
     if (categoryid && categoryslug) {
@@ -69,6 +75,21 @@ export default function BusinessByAllCategoryPage({
     } finally {
       setLoading(false);
     }
+  };
+
+  const WebPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: `${title} - ${ProjectSetting.COMPANY_NAME}`,
+    description: dynamicDescription,
+    url: `${
+      ProjectSetting.COMPANY_WEBSITE + "/" + categoryslug + "/" + categoryid
+    }/business-category`,
+    author: {
+      "@type": "Organization",
+      name: ProjectSetting.COMPANY_NAME,
+      url: `${ProjectSetting.COMPANY_WEBSITE}`,
+    },
   };
 
   if (loading) {
@@ -113,12 +134,32 @@ export default function BusinessByAllCategoryPage({
 
   return (
     <>
+      <Head>
+        {/* WebPage Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(WebPageSchema),
+          }}
+        />
+      </Head>
+
       <HeadSeo
-        title={title}
-        description="Your gateway to discovering businesses, jobs, properties, and more."
-        canonical="https://gkp360.com/"
+        title={`${title} - ${ProjectSetting.COMPANY_NAME}`}
+        description={dynamicDescription}
+        canonical={`${
+          ProjectSetting.COMPANY_WEBSITE + "/" + categoryslug + "/" + categoryid
+        }/business-category`}
+        keywords={subcategories.subcategories
+          .map((category) => category.category_name)
+          .join(", ")}
+        author={ProjectSetting.COMPANY_NAME}
+        robots="index, follow"
+        favicon={ProjectSetting.favicon}
+        ogImage={ProjectSetting.LOGO_URL}
+        twitterImage={ProjectSetting.LOGO_URL}
+        language="en"
       />
-      {/* Ad Banner */}
 
       {/* SEO Main Title */}
       <Typography
