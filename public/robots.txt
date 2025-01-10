@@ -2,3 +2,5 @@ User-agent: *
 Disallow:
 
 Sitemap: https://gkp.com/api/sitemap/business-category-with-city-index
+Sitemap: https://gkp.com/api/sitemap/business-primary-category
+
