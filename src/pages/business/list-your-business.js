@@ -176,7 +176,7 @@ const ListYourBusiness = () => {
                   ₹{plan.price} for {plan.duration}
                 </Typography>
                 <Divider sx={{ marginBottom: "15px" }} />
-                <Box sx={{ maxHeight: "200px", overflowY: "auto" }}>
+                {/* <Box sx={{ maxHeight: "200px", overflowY: "auto" }}>
                   {Object.entries(plan)
                     .filter(([key]) => key !== "plan_id")
                     .map(([key, value]) => (
@@ -220,7 +220,7 @@ const ListYourBusiness = () => {
                         )}
                       </Box>
                     ))}
-                </Box>
+                </Box> */}
               </CardContent>
               <Box
                 sx={{
