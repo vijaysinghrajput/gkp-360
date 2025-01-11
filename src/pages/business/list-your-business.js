@@ -18,27 +18,27 @@ import {
 } from "@mui/icons-material";
 import axios from "axios";
 import { ProjectSetting } from "../../config/ProjectSetting";
-import { useAuth } from "../../context/AuthContext"; // Import AuthContext
+import { useAuth } from "../../context/AuthContext";
 import { useRouter } from "next/router";
 import LoginComponent from "../business/comonent/LoginComponent";
 
 const ListYourBusiness = () => {
-  const [plans, setPlans] = useState([]);
+  const [plan, setPlan] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [selectedPlanId, setSelectedPlanId] = useState(null);
-  const { user } = useAuth(); // Use AuthContext
-  const router = useRouter(); // Initialize useRouter
+  const { user } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     axios
       .get(`${ProjectSetting.API_URL}/Website/getPlans`)
       .then((response) => {
-        if (response.data.status == "success") {
-          setPlans(response.data.data);
+        if (response.data.status == "success" && response.data.data.length) {
+          setPlan(response.data.data[0]); // Only set the first plan
         } else {
-          setError(response.data.message);
+          setError(response.data.message || "No plans available.");
         }
       })
       .catch((err) => {
@@ -120,7 +120,7 @@ const ListYourBusiness = () => {
             fontWeight: "bold",
           }}
         >
-          Affordable Plans to List Your Business Online
+          Affordable Plan to List Your Business Online
         </Typography>
         <Typography
           variant="subtitle1"
@@ -133,20 +133,17 @@ const ListYourBusiness = () => {
         </Typography>
       </Box>
 
-      {/* Plans Section */}
+      {/* Plan Section */}
       <Grid
         container
         spacing={3}
-        sx={{
-          padding: "20px",
-          justifyContent: "center",
-        }}
+        sx={{ padding: "20px", justifyContent: "center" }}
       >
-        {plans.map((plan, index) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+        {plan && (
+          <Grid item xs={12} sm={6} md={4} lg={3}>
             <Card
               sx={{
-                border: `2px solid ${index % 2 == 0 ? "#4CAF50" : "#FFC107"}`,
+                border: "2px solid #4CAF50",
                 boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
                 borderRadius: "16px",
                 display: "flex",
@@ -159,14 +156,7 @@ const ListYourBusiness = () => {
                 },
               }}
             >
-              <CardContent
-                sx={{
-                  flex: 1,
-                  overflowY: "auto",
-                  padding: "20px",
-                  textAlign: "center",
-                }}
-              >
+              <CardContent sx={{ padding: "20px", textAlign: "center" }}>
                 <Typography
                   variant="h6"
                   sx={{
@@ -186,12 +176,7 @@ const ListYourBusiness = () => {
                   ₹{plan.price} for {plan.duration}
                 </Typography>
                 <Divider sx={{ marginBottom: "15px" }} />
-                <Box
-                  sx={{
-                    maxHeight: "200px",
-                    overflowY: "auto",
-                  }}
-                >
+                <Box sx={{ maxHeight: "200px", overflowY: "auto" }}>
                   {Object.entries(plan)
                     .filter(([key]) => key !== "plan_id")
                     .map(([key, value]) => (
@@ -206,7 +191,7 @@ const ListYourBusiness = () => {
                           display="flex"
                           alignItems="center"
                           gap={1}
-                          sx={{ flex: 1, overflowWrap: "break-word" }}
+                          sx={{ flex: 1 }}
                         >
                           <InfoIcon fontSize="small" />
                           <Typography variant="body2">
@@ -237,8 +222,6 @@ const ListYourBusiness = () => {
                     ))}
                 </Box>
               </CardContent>
-
-              {/* Footer */}
               <Box
                 sx={{
                   backgroundColor: "#f1f1f1",
@@ -250,9 +233,7 @@ const ListYourBusiness = () => {
                   variant="contained"
                   color="primary"
                   fullWidth
-                  sx={{
-                    borderRadius: "50px",
-                  }}
+                  sx={{ borderRadius: "50px" }}
                   onClick={() => handleSelectPlan(plan.plan_id)}
                 >
                   Select Plan
@@ -260,7 +241,7 @@ const ListYourBusiness = () => {
               </Box>
             </Card>
           </Grid>
-        ))}
+        )}
       </Grid>
 
       {/* Login Modal */}
