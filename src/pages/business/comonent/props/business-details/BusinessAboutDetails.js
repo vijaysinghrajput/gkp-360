@@ -15,11 +15,11 @@ export default function BusinessAboutDetails({ business }) {
       }}
     >
       {/* Logo */}
-      {business.logo && (
+      {business?.logo && (
         <CardMedia
           component="img"
-          image={business.logo}
-          alt={`${business.title} Logo`}
+          image={business?.logo}
+          alt={`${business?.title} Logo`}
           sx={{
             width: 100,
             height: 100,
@@ -37,7 +37,7 @@ export default function BusinessAboutDetails({ business }) {
         gutterBottom
         sx={{ fontSize: "1.5rem" }}
       >
-        {business.title}
+        {business?.title}
       </Typography>
 
       {/* Category */}
@@ -46,7 +46,7 @@ export default function BusinessAboutDetails({ business }) {
         color="text.secondary"
         sx={{ mb: 2, fontSize: "1rem" }}
       >
-        <strong>Category:</strong> {business.primary_category_name}
+        <strong>Category:</strong> {business?.primary_category_name}
       </Typography>
 
       {/* About Section */}
@@ -59,7 +59,7 @@ export default function BusinessAboutDetails({ business }) {
           fontSize: "0.95rem",
         }}
       >
-        {business.about || "No description available."}
+        {business?.about || "No description available."}
       </Typography>
     </Box>
   );
