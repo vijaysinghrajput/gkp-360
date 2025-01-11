@@ -15,12 +15,13 @@ import HeadSeo from "../seo/HeadSeo";
 // import BusinessByCategorySchemaList from "../seo/business/BusinessByCategorySchemaList";
 import { useRouter } from "next/router";
 import BusinessSubacategoryLists from "../../pages/business/comonent/BusinessSubacategoryLists";
-import BusinessListCardRactangular from "../../pages/business/comonent/BusinessListCardRactangular";
+import BusinessDetailsPageCompoenets from "../../pages/business/comonent/props/business-details/BusinessDetailsPageCompoenets";
 import BusinessDetailsBreadcrumbList from "../../pages/business/comonent/BusinessDetailsBreadcrumbList";
 import { ProjectSetting } from "../../config/ProjectSetting";
 
 export default function BusinessDetailsPage({ titles, listing_id }) {
   const [businesses, setBusinesses] = useState([]);
+  const [businessesPhoto, setBusinessPhoto] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
   const [currentCategory, setCurrentCategory] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -47,6 +48,9 @@ export default function BusinessDetailsPage({ titles, listing_id }) {
 
       if (data.status === "success") {
         setBusinesses(data.data);
+        setBusinessPhoto(data.photo);
+
+        // console.log("data.photo", data.photo);
 
         setCity(data.data[0].city.replace(/\s+/g, "-"));
         setState(data.data[0].state.replace(/\s+/g, "-"));
@@ -125,14 +129,16 @@ export default function BusinessDetailsPage({ titles, listing_id }) {
       {/* Ad Banner */}
 
       {/* SEO Main Title */}
-      <Typography
-        variant="h4"
-        align="center"
-        marginBottom={2}
-        fontWeight="bold"
+
+      <h1
+        style={{
+          fontSize: "24px", // Small screens
+          textAlign: "center",
+          marginBottom: "24px",
+        }}
       >
         {title}
-      </Typography>
+      </h1>
 
       {/* SEO Friendly Links */}
 
@@ -157,11 +163,9 @@ export default function BusinessDetailsPage({ titles, listing_id }) {
         <Grid container spacing={3} sx={{ flexGrow: 1 }}>
           {/* Businesses Column (8 Grid) */}
           <Grid item xs={12} md={8}>
-            <BusinessListCardRactangular
-              categoryName={toTitleCase(titles)}
+            <BusinessDetailsPageCompoenets
               businesses={businesses}
-              city={city}
-              state={state}
+              businessesPhoto={businessesPhoto}
             />
           </Grid>
 
