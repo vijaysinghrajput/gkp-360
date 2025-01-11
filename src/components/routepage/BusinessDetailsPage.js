@@ -1,18 +1,7 @@
 import { useEffect, useState } from "react";
-import {
-  Box,
-  Typography,
-  CircularProgress,
-  Grid,
-  Card,
-  CardContent,
-  CardMedia,
-  TextField,
-  Button,
-  Link,
-} from "@mui/material";
+import { Box, Typography, CircularProgress, Grid, Button } from "@mui/material";
 import HeadSeo from "../seo/HeadSeo";
-// import BusinessByCategorySchemaList from "../seo/business/BusinessByCategorySchemaList";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import BusinessSubacategoryLists from "../../pages/business/comonent/BusinessSubacategoryLists";
 import BusinessDetailsPageCompoenets from "../../pages/business/comonent/props/business-details/BusinessDetailsPageCompoenets";
@@ -44,14 +33,9 @@ export default function BusinessDetailsPage({ titles, listing_id }) {
 
       const data = await response.json();
 
-      console.log("data.subcategories.current_category", data.subcategories);
-
       if (data.status === "success") {
         setBusinesses(data.data);
         setBusinessPhoto(data.photo);
-
-        // console.log("data.photo", data.photo);
-
         setCity(data.data[0].city.replace(/\s+/g, "-"));
         setState(data.data[0].state.replace(/\s+/g, "-"));
         setSubcategories(data.subcategories);
@@ -78,6 +62,48 @@ export default function BusinessDetailsPage({ titles, listing_id }) {
       .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize the first letter of each word
 
   const title = `${toTitleCase(titles)}`;
+  const dynamicDescription = businesses.length
+    ? businesses[0].about // Check if "about" column is present for the first business
+      ? `${
+          businesses[0].about
+        } Explore top-rated services offered by ${toTitleCase(
+          titles
+        )} in ${city}, ${state}. Find trusted businesses on ${
+          ProjectSetting.COMPANY_NAME
+        }.`
+      : `Explore top-rated ${toTitleCase(
+          titles
+        )} businesses in ${city}, ${state} with ${
+          businesses.length
+        } listings on ${
+          ProjectSetting.COMPANY_NAME
+        }. Find reviews, services, and trusted businesses tailored to your needs.`
+    : `Discover top ${toTitleCase(titles)} businesses in ${city}, ${state} on ${
+        ProjectSetting.COMPANY_NAME
+      }. Explore services, reviews, and more.`;
+
+  const dynamicKeywords = subcategories?.subcategories
+    ?.map((category) => `${category.category_name} in ${city}, ${state}`)
+    .join(", ");
+
+  const WebPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: `${title} - ${ProjectSetting.COMPANY_NAME}`,
+    description: dynamicDescription,
+    url: `${
+      ProjectSetting.COMPANY_WEBSITE +
+      "/" +
+      businesses[0]?.listing_url +
+      "/" +
+      listing_id
+    }/business-profile`,
+    author: {
+      "@type": "Organization",
+      name: ProjectSetting.COMPANY_NAME,
+      url: `${ProjectSetting.COMPANY_WEBSITE}`,
+    },
+  };
 
   if (loading) {
     return (
@@ -121,18 +147,38 @@ export default function BusinessDetailsPage({ titles, listing_id }) {
 
   return (
     <>
-      <HeadSeo
-        title={title}
-        description="Your gateway to discovering businesses, jobs, properties, and more."
-        canonical="https://gkp360.com/"
-      />
-      {/* Ad Banner */}
+      <Head>
+        {/* Schema for WebPage */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(WebPageSchema),
+          }}
+        />
+      </Head>
 
-      {/* SEO Main Title */}
+      <HeadSeo
+        title={`${title} - ${ProjectSetting.COMPANY_NAME}`}
+        description={dynamicDescription}
+        canonical={`${
+          ProjectSetting.COMPANY_WEBSITE +
+          "/" +
+          businesses[0]?.listing_url +
+          "/" +
+          listing_id
+        }/business-profile`}
+        keywords={dynamicKeywords}
+        author={ProjectSetting.COMPANY_NAME}
+        robots="index, follow"
+        favicon={ProjectSetting.favicon}
+        ogImage={ProjectSetting.LOGO_URL}
+        twitterImage={ProjectSetting.LOGO_URL}
+        language="en"
+      />
 
       <h1
         style={{
-          fontSize: "24px", // Small screens
+          fontSize: "24px",
           textAlign: "center",
           marginBottom: "24px",
         }}
@@ -140,8 +186,7 @@ export default function BusinessDetailsPage({ titles, listing_id }) {
         {title}
       </h1>
 
-      {/* SEO Friendly Links */}
-
+      {/* Breadcrumb Navigation */}
       <BusinessDetailsBreadcrumbList
         currentCategory={currentCategory}
         title={title}
@@ -155,13 +200,13 @@ export default function BusinessDetailsPage({ titles, listing_id }) {
         sx={{
           padding: { xs: 2, sm: 3, md: 4 },
           bgcolor: "#f9f9f9",
-          minHeight: "100vh", // Ensure it covers the full viewport height
+          minHeight: "100vh",
           display: "flex",
           flexDirection: "column",
         }}
       >
         <Grid container spacing={3} sx={{ flexGrow: 1 }}>
-          {/* Businesses Column (8 Grid) */}
+          {/* Businesses Section */}
           <Grid item xs={12} md={8}>
             <BusinessDetailsPageCompoenets
               businesses={businesses}
@@ -169,7 +214,7 @@ export default function BusinessDetailsPage({ titles, listing_id }) {
             />
           </Grid>
 
-          {/* Subcategories Column (4 Grid) */}
+          {/* Subcategories Section */}
           <Grid item xs={12} md={4}>
             <BusinessSubacategoryLists
               mainCategoryName={currentCategory?.main_category_name}
