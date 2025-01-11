@@ -8,35 +8,35 @@ export default function BusinessContact({ business }) {
   const contactDetails = [
     {
       label: "Primary Number",
-      value: business.primary_number,
+      value: business?.primary_number,
       icon: <PhoneIcon />,
-      action: `tel:${business.primary_number}`,
+      action: `tel:${business?.primary_number}`,
     },
     {
       label: "Other Number",
-      value: business.other_number || "Not specified",
+      value: business?.other_number || "Not specified",
       icon: <PhoneIcon />,
-      action: business.other_number ? `tel:${business.other_number}` : null,
+      action: business?.other_number ? `tel:${business?.other_number}` : null,
     },
     {
       label: "WhatsApp",
-      value: business.whatsapp_number || "Not specified",
+      value: business?.whatsapp_number || "Not specified",
       icon: <WhatsAppIcon />,
-      action: business.whatsapp_number
-        ? `https://wa.me/${business.whatsapp_number}`
+      action: business?.whatsapp_number
+        ? `https://wa.me/${business?.whatsapp_number}`
         : null,
     },
     {
       label: "Email",
-      value: business.email,
+      value: business?.email,
       icon: <EmailIcon />,
-      action: `mailto:${business.email}`,
+      action: `mailto:${business?.email}`,
     },
     {
       label: "Website",
-      value: business.website,
+      value: business?.website,
       icon: <LanguageIcon />,
-      action: business.website,
+      action: business?.website,
     },
   ];
 
