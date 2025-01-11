@@ -7,11 +7,15 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 
 export default function BusinessSocialMedia({ business }) {
   const socialLinks = [
-    { name: "Facebook", icon: <FacebookIcon />, url: business.facebook },
-    { name: "Instagram", icon: <InstagramIcon />, url: business.instagram },
-    { name: "Google My Business", icon: <LocationOnIcon />, url: business.gmb },
-    { name: "Twitter", icon: <TwitterIcon />, url: business.twitter },
-    { name: "YouTube", icon: <YouTubeIcon />, url: business.youtube },
+    { name: "Facebook", icon: <FacebookIcon />, url: business?.facebook },
+    { name: "Instagram", icon: <InstagramIcon />, url: business?.instagram },
+    {
+      name: "Google My Business",
+      icon: <LocationOnIcon />,
+      url: business?.gmb,
+    },
+    { name: "Twitter", icon: <TwitterIcon />, url: business?.twitter },
+    { name: "YouTube", icon: <YouTubeIcon />, url: business?.youtube },
   ];
 
   return (

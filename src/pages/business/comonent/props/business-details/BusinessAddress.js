@@ -2,7 +2,16 @@ import { Box, Typography, Link, Grid, IconButton } from "@mui/material";
 import MapIcon from "@mui/icons-material/Map";
 
 export default function BusinessAddress({ business }) {
-  const { street, area, city, state, zip, country, lat, lan } = business;
+  const {
+    street = "Not specified",
+    area = "Not specified",
+    city = "Not specified",
+    state = "Not specified",
+    zip = "Not specified",
+    country = "Not specified",
+    lat = null,
+    lan = null,
+  } = business || {}; // Default to empty object to prevent destructuring errors
 
   const getGoogleMapsLink = (latitude, longitude) => {
     return `https://www.google.com/maps?q=${latitude},${longitude}`;
@@ -16,12 +25,12 @@ export default function BusinessAddress({ business }) {
       <Grid container spacing={1}>
         <Grid item xs={12}>
           <Typography>
-            <strong>Street:</strong> {street || "Not specified"}
+            <strong>Street:</strong> {street}
           </Typography>
         </Grid>
         <Grid item xs={12}>
           <Typography>
-            <strong>Area:</strong> {area || "Not specified"}
+            <strong>Area:</strong> {area}
           </Typography>
         </Grid>
         <Grid item xs={6}>
@@ -36,7 +45,7 @@ export default function BusinessAddress({ business }) {
         </Grid>
         <Grid item xs={6}>
           <Typography>
-            <strong>Zip Code:</strong> {zip || "Not specified"}
+            <strong>Zip Code:</strong> {zip}
           </Typography>
         </Grid>
         <Grid item xs={6}>
