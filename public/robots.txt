@@ -1,9 +1,7 @@
 User-agent: *
-Disallow:
+Allow: /api/sitemap/
 
 Sitemap: https://gkp.com/api/sitemap/business-category-with-city-index
 Sitemap: https://gkp.com/api/sitemap/business-primary-category
 Sitemap: https://gkp.com/api/sitemap/business-all-category
 Sitemap: https://gkp.com/api/sitemap/business-details-index
-
-
